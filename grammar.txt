@@ -1,0 +1,72 @@
+﻿Program → StatementList
+
+StatementList → Statement StatementList
+              | ε
+
+Statement → AssignmentStatement
+          | IfStatement
+          | WhileStatement
+          | PrintStatement
+          | FunctionDeclaration
+
+AssignmentStatement → IDENTIFIER "=" Expression
+
+IfStatement → "if" "(" BooleanExpression ")" "{" StatementList "}" ElseClause
+
+ElseClause → "else" "{" StatementList "}"
+           | ε
+
+WhileStatement → "while" "(" BooleanExpression ")" "{" StatementList "}"
+
+PrintStatement → "print" "(" Expression ")"
+
+FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")" "{" StatementList ReturnStatement "}"
+
+ParameterList → IDENTIFIER
+              | IDENTIFIER "," ParameterList
+              | ε
+
+ReturnStatement → "return" Expression
+                | ε
+
+BooleanExpression → IntExpression "==" IntExpression
+                  | IntExpression "!=" IntExpression
+                  | FloatExpression "==." FloatExpression
+                  | FloatExpression "!=." FloatExpression
+                  | BOOLEAN
+
+Expression → IntExpression
+           | FloatExpression
+           | StringExpression
+           | BooleanExpression
+           | IDENTIFIER
+           | "(" Expression ")"
+
+IntExpression → IntExpression "+" IntTerm
+              | IntExpression "-" IntTerm
+              | IntTerm
+
+IntTerm → IntTerm "*" IntFactor
+        | IntTerm "/" IntFactor
+        | IntFactor
+
+IntFactor → INTEGER
+          | IDENTIFIER
+          | "(" IntExpression ")"
+          | "-" IntFactor
+
+FloatExpression → FloatExpression "+." FloatTerm
+                | FloatExpression "-." FloatTerm
+                | FloatTerm
+
+FloatTerm → FloatTerm "*." FloatFactor
+          | FloatTerm "/." FloatFactor
+          | FloatFactor
+          | "-." FloatTerm
+
+FloatFactor → FLOAT
+            | IDENTIFIER
+            | "(" FloatExpression ")"
+
+StringExpression → STRING
+                 | StringExpression "++" StringExpression
