@@ -53,7 +53,7 @@ IntTerm → IntTerm "*" IntFactor
 IntFactor → INTEGER
           | IDENTIFIER
           | "(" IntExpression ")"
-          | "-" IntFactor
+          | "--" IntFactor
 
 FloatExpression → FloatExpression "+." FloatTerm
                 | FloatExpression "-." FloatTerm
@@ -62,7 +62,7 @@ FloatExpression → FloatExpression "+." FloatTerm
 FloatTerm → FloatTerm "*." FloatFactor
           | FloatTerm "/." FloatFactor
           | FloatFactor
-          | "-." FloatTerm
+          | "--." FloatTerm
 
 FloatFactor → FLOAT
             | IDENTIFIER
