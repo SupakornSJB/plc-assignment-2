@@ -5,38 +5,44 @@
 UMINUS is **unary minus** — a negation applied to a single operand, not a subtraction between two values.
 
 ```
--5        ← UMINUS, negates the integer 5
--3.14     ← UMINUS, negates the float 3.14
--x        ← UMINUS, negates the value of variable x
--(1 + 2)  ← UMINUS, negates the result of an expression
+--5        ← UMINUS, negates the integer 5
+--.3.14    ← UMINUS, negates the float 3.14
+--x        ← UMINUS, negates the value of variable x
+--(1 + 2)  ← UMINUS, negates the result of an expression
 ```
 
-The challenge is that `-` is also used for **binary subtraction** (`1 - 2`), so the lexer produces the same `-` token for both cases. It's the **parser's job** to tell them apart by context.
+The challenge is that `-` is also used for **binary subtraction** (`1 - 2`). To avoid ambiguity, our grammar uses **explicit double-minus tokens** (`--` and `--.`) for unary negation instead of reusing the single `-`.
 
 ---
 
 ## In the Grammar
 
-UMINUS is added at the `Factor` level because it has the **highest precedence** — it binds tighter than `*`, `/`, `+`, `-`.
+Integer UMINUS uses `"--"` at the `IntFactor` level (highest precedence — binds tighter than `*`, `/`, `+`, `-`):
 
 ```
 IntFactor → INTEGER
           | IDENTIFIER
           | "(" IntExpression ")"
-          | "-" IntFactor          ← UMINUS (recursive, allows --x)
-
-FloatFactor → FLOAT
-            | IDENTIFIER
-            | "(" FloatExpression ")"
-            | "-." FloatFactor     ← UMINUS for float
+          | "--" IntFactor          ← UMINUS (recursive, allows ----x)
 ```
 
-Placing it in `Factor` (not `Term` or `Expression`) ensures correct precedence:
+Float UMINUS uses `"--."` at the `FloatTerm` level:
 
 ```
--2 * 3   →  (-2) * 3   ✅  (UMINUS binds tighter than *)
--(1 + 2) →  -(3)       ✅  (parentheses evaluated first, then negated)
---5      →  -(-5) = 5  ✅  (recursive, double negation works)
+FloatTerm → FloatTerm "*." FloatFactor
+          | FloatTerm "/." FloatFactor
+          | FloatFactor
+          | "--." FloatTerm         ← UMINUS for float
+```
+
+Using `"--"` and `"--."` as distinct tokens from `-` and `-.` means the lexer produces different tokens for unary vs. binary minus — no parser-level ambiguity.
+
+Precedence examples:
+
+```
+--2 * 3    →  (--2) * 3   ✅  (UMINUS at IntFactor binds tighter than *)
+--(1 + 2)  →  -(3)        ✅  (parentheses evaluated first, then negated)
+----5      →  -(-(-(-5)))  ✅  (recursive, quadruple negation works)
 ```
 
 ---
@@ -44,12 +50,12 @@ Placing it in `Factor` (not `Term` or `Expression`) ensures correct precedence:
 ## The AST Node
 
 ```python
-# "-" IntFactor
+# "--" IntFactor
 class UnaryMinusIntNode(Node):
     def __init__(self, operand):
         self.operand = operand  # Node
 
-# "-." FloatFactor
+# "--." FloatTerm
 class UnaryMinusFloatNode(Node):
     def __init__(self, operand):
         self.operand = operand  # Node
@@ -57,70 +63,32 @@ class UnaryMinusFloatNode(Node):
 
 ---
 
-## In SLY — The Problem
+## In SLY
 
-`MINUS` is used for both binary subtraction and UMINUS:
+Since `"--"` and `"--."` are dedicated tokens (distinct from `-` and `-.`), there is **no precedence conflict** — no `%prec UMINUS` trick is needed.
 
 ```python
-# Binary subtraction — MINUS used here
+# Binary subtraction — MINUS token
 @_('int_expression MINUS int_term')
 def int_expression(self, p):
     return IntBinaryOpNode(p.int_expression, '-', p.int_term)
 
-# Unary minus — MINUS also used here
-@_('MINUS int_factor')
+# Unary minus — DOUBLEMINUS token, no conflict
+@_('DOUBLEMINUS int_factor')
 def int_factor(self, p):
     return UnaryMinusIntNode(p.int_factor)
 ```
 
-This creates a **precedence conflict** — when the parser sees `MINUS`, it doesn't know which rule to apply. Without guidance, it would give UMINUS the same precedence as binary `-`, causing wrong parse trees:
-
-```
-1 + -2   →  parsed as  (1 + -) 2  ❌ (wrong)
-           should be   1 + (-2)   ✅
-```
-
----
-
-## In SLY — The Fix (`%prec`)
-
-Declare a `UMINUS` pseudo-token in the precedence table with **higher precedence** than binary operators, then tag the rule with `%prec UMINUS`:
-
-```python
-class MyParser(Parser):
-
-    precedence = (
-        ('right', ELSE),                    # for dangling else
-        ('left', PLUS, MINUS),              # lowest among arithmetic
-        ('left', TIMES, DIVIDE),            # higher than +/-
-        ('right', UMINUS),                  # highest — applied last, binds tightest
-    )
-
-    # Binary subtraction — uses MINUS precedence (left, level 2)
-    @_('int_expression MINUS int_term')
-    def int_expression(self, p):
-        return IntBinaryOpNode(p.int_expression, '-', p.int_term)
-
-    # Unary minus — override to use UMINUS precedence (right, level 4)
-    @_('MINUS int_factor %prec UMINUS')
-    def int_factor(self, p):
-        return UnaryMinusIntNode(p.int_factor)
-```
-
-`%prec UMINUS` tells SLY: *"use the precedence of `UMINUS` for this rule, not the precedence of `MINUS`"*.
-
-`UMINUS` is **not a real token** — it never appears in the lexer. It's a virtual marker only used to assign a precedence level.
-
 ### Float UMINUS
 
 ```python
-    # Float unary minus — uses a separate operator "-."
-    @_('MINUSDOT float_factor')
-    def float_factor(self, p):
-        return UnaryMinusFloatNode(p.float_factor)
+# Float unary minus — DOUBLEMINUSDOT token
+@_('DOUBLEMINUSDOT float_term')
+def float_term(self, p):
+    return UnaryMinusFloatNode(p.float_term)
 ```
 
-Since float uses `-.` (a distinct token from `-`), there's **no ambiguity** with float binary subtraction (`-. `is always unary or binary float minus). No `%prec` trick needed for floats.
+Float UMINUS applies to `float_term` (not `float_factor`), matching the grammar placement.
 
 ---
 
@@ -144,17 +112,17 @@ def visit_UnaryMinusFloatNode(self, node):
 
 ### Source
 ```
-x = -5
-y = -(1 + 2)
-z = --3
-a = -. 3.14
+x = --5
+y = --(1 + 2)
+z = ----3
+a = --. 3.14
 ```
 
 ### AST
 ```
 AssignmentNode("x", UnaryMinusIntNode(IntLiteralNode(5)))
 AssignmentNode("y", UnaryMinusIntNode(IntBinaryOpNode(IntLiteralNode(1), '+', IntLiteralNode(2))))
-AssignmentNode("z", UnaryMinusIntNode(UnaryMinusIntNode(IntLiteralNode(3))))
+AssignmentNode("z", UnaryMinusIntNode(UnaryMinusIntNode(UnaryMinusIntNode(UnaryMinusIntNode(IntLiteralNode(3))))))
 AssignmentNode("a", UnaryMinusFloatNode(FloatLiteralNode(3.14)))
 ```
 
@@ -181,8 +149,9 @@ visit(UnaryMinusIntNode(UnaryMinusIntNode(IntLiteralNode(3))))
 
 | Concern | Solution |
 |---------|----------|
-| Grammar | Add `"-" IntFactor` production at `Factor` level |
-| Precedence conflict with binary `-` | Use `%prec UMINUS` pseudo-token in SLY |
-| Float UMINUS | Use distinct `-.` token, no conflict |
+| Grammar (int) | `"--" IntFactor` production at `IntFactor` level |
+| Grammar (float) | `"--." FloatTerm` production at `FloatTerm` level |
+| Ambiguity with binary `-` | Avoided by using distinct `"--"` / `"--."` tokens |
+| Precedence trick | Not needed — no token overlap |
 | AST Node | `UnaryMinusIntNode`, `UnaryMinusFloatNode` |
 | Visitor | Evaluate operand, negate and return |
