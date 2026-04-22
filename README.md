@@ -31,3 +31,40 @@ Some supported constructs include:
     - `!=`
     - `==.`
     - `!=.`
+
+## Setup
+
+Requires [uv](https://docs.astral.sh/uv/). Install it with:
+
+```bash
+powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+Install dependencies:
+
+```bash
+uv sync
+```
+
+## Running
+
+Run the lexer directly:
+
+```bash
+uv run src/lexer.py
+```
+
+## Testing
+
+Install dev dependencies and run tests:
+
+```bash
+uv sync --group dev
+uv run pytest tests/ -v
+```
+
+Run a specific test:
+
+```bash
+uv run pytest tests/test_lexer.py::test_integer_literal -v
+```

@@ -1,0 +1,17 @@
+[project]
+name = "plc-assignment-2"
+version = "0.1.0"
+requires-python = ">=3.10"
+dependencies = [
+    "pyside6>=6.10.2",
+    "sly @ git+https://github.com/dabeaz/sly@master",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+    "pytest-dependency>=0.6.1",
+]
