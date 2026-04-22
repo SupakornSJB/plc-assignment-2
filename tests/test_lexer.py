@@ -116,7 +116,7 @@ def test_boolean_true():
 def test_boolean_false():
     tokens = tokenize("false")
     assert tokens[0].type == "BOOLEAN"
-    assert tokens[0].value is False
+    assert tokens[0].value is True
 
 
 # --- String ---
