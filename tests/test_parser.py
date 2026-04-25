@@ -442,7 +442,7 @@ class TestSyntaxErrors:
 # ---------------------------------------------------------------------------
 # 12. Parser initialisation
 # ---------------------------------------------------------------------------
-
+#######
 class TestParserInit:
 
     def test_is_syntax_error_starts_false(self):
