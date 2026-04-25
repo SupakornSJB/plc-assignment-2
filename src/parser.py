@@ -5,7 +5,7 @@ from lexer import LanguageLexer  # Import lexer của bạn
 class LanguageParser(Parser):
     tokens = LanguageLexer.tokens
 
-    # Define precedence###########
+    # Define precedence##############
     precedence = (
         ('left', INTEGER_ADDITION, INTEGER_SUBTRACTION),
         ('left', INTEGER_MULTIPLICATION, INTEGER_DIVISION),
