@@ -1,5 +1,5 @@
 from sly import Parser, Lexer  # noqa
-from lexer import LanguageLexer
+from src.lexer import LanguageLexer
 
 
 # ==================== Token Stream Wrapper ====================
