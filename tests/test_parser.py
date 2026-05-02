@@ -4,28 +4,18 @@ Run with: pytest test_parser.py -v
 """
 
 import pytest
-from unittest.mock import MagicMock, patch
 
 
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
 
-def make_parser():
-    """Return a fresh (lexer, parser) pair."""
-    from lexer import LanguageLexer
-    from parser import LanguageParser
-    return LanguageLexer(), LanguageParser()
-
-
 def parse(source: str):
     """
     Parse *source* and return (result, lexer, parser).
-    Raises AssertionError if a lexical or syntax error occurred.
     """
-    lexer, parser = make_parser()
-    result = parser.parse(lexer.tokenize(source))
-    return result, lexer, parser
+    from parser import parse_program
+    return parse_program(source)
 
 
 def parse_ok(source: str):
@@ -73,35 +63,29 @@ class TestIntegerAssignment:
         assert ast[1][0][2] == ('int_div', ('integer', 8), ('integer', 2))
 
     def test_complex_arithmetic(self):
-        # x + y - 2 * 4 / 2  — just check it parses without error
         ast = parse_ok("x = 1\ny = 2\nz = x + y - 2 * 4 / 2")
         assert ast[1][2][0] == 'assign'
         assert ast[1][2][1] == 'z'
 
     def test_unary_minus(self):
-        # Lexer tokenize '--5' thành INTEGER_UMINUS (token '--') + INTEGER(5)
-        # nên parser chỉ tạo được 1 lớp int_uminus, không phải 2
         ast = parse_ok("n = --5")
         outer = ast[1][0][2]
         assert outer[0] == 'int_uminus'
         assert outer[1] == ('integer', 5)
 
     def test_unary_minus_identifier(self):
-        # -- áp dụng lên IDENTIFIER
         ast = parse_ok("x = 1\nn = --x")
         outer = ast[1][1][2]
         assert outer[0] == 'int_uminus'
         assert outer[1] == ('identifier', 'x')
 
     def test_unary_minus_expression(self):
-        # -- áp dụng lên biểu thức trong ngoặc
         ast = parse_ok("n = --(1 + 2)")
         outer = ast[1][0][2]
         assert outer[0] == 'int_uminus'
         assert outer[1][0] == 'int_add'
 
     def test_single_minus_invalid(self):
-        # Dấu trừ đơn lẻ không hợp lệ trong grammar (chỉ có -- không có -)
         parse_fail("n = -5")
 
     def test_identifier_in_expression(self):
@@ -142,21 +126,18 @@ class TestFloatAssignment:
         assert outer[1] == ('float', 3.0)
 
     def test_float_unary_minus_identifier(self):
-        # --. áp dụng lên IDENTIFIER (biến float)
         ast = parse_ok("a = 1.5\nd = --. a")
         outer = ast[1][1][2]
         assert outer[0] == 'float_uminus'
         assert outer[1] == ('identifier', 'a')
 
     def test_float_unary_minus_expression(self):
-        # --. áp dụng lên biểu thức trong ngoặc
         ast = parse_ok("d = --. (1.0 +. 2.0)")
         outer = ast[1][0][2]
         assert outer[0] == 'float_uminus'
         assert outer[1][0] == 'float_add'
 
     def test_single_float_minus_invalid(self):
-        # -. đơn lẻ không hợp lệ trong grammar (chỉ có --. không có -.)
         parse_fail("d = -. 3.0")
 
     def test_float_complex_expression(self):
@@ -181,7 +162,6 @@ class TestStringAssignment:
 
     def test_chained_concat(self):
         ast = parse_ok("t = 'a' ++ 'b' ++ 'c'")
-        # Should parse left-associatively
         assert ast[1][0][2][0] == 'string_concat'
 
 
@@ -209,23 +189,23 @@ class TestBooleanAssignment:
 class TestBooleanExpressions:
 
     def test_int_equality(self):
-        ast = parse_ok("if (x == y) { z = 1 }")
-        cond = ast[1][0][1]
+        ast = parse_ok("x = 1\ny = 2\nif (x == y) { z = 1 }")
+        cond = ast[1][2][1]
         assert cond[0] == 'int_eq'
 
     def test_int_inequality(self):
-        ast = parse_ok("if (x != y) { z = 1 }")
-        cond = ast[1][0][1]
+        ast = parse_ok("x = 1\ny = 2\nif (x != y) { z = 1 }")
+        cond = ast[1][2][1]
         assert cond[0] == 'int_neq'
 
     def test_float_equality(self):
-        ast = parse_ok("if (a ==. b) { c = 0.0 }")
-        cond = ast[1][0][1]
+        ast = parse_ok("a = 1.0\nb = 2.0\nif (a ==. b) { c = 0.0 }")
+        cond = ast[1][2][1]
         assert cond[0] == 'float_eq'
 
     def test_float_inequality(self):
-        ast = parse_ok("if (a !=. b) { c = 0.0 }")
-        cond = ast[1][0][1]
+        ast = parse_ok("a = 1.0\nb = 2.0\nif (a !=. b) { c = 0.0 }")
+        cond = ast[1][2][1]
         assert cond[0] == 'float_neq'
 
 
@@ -240,12 +220,12 @@ class TestIfStatement:
         ast = parse_ok(src)
         stmt = ast[1][0]
         assert stmt[0] == 'if'
-        assert stmt[3] is None  # no else clause
+        assert stmt[3] is None
 
     def test_if_with_else(self):
-        src = "if (x == y) { x = 0 } else { x = 1 }"
+        src = "x = 1\ny = 2\nif (x == y) { x = 0 } else { x = 1 }"
         ast = parse_ok(src)
-        stmt = ast[1][0]
+        stmt = ast[1][2]
         assert stmt[0] == 'if'
         assert stmt[3] is not None
         assert stmt[3][0] == 'else'
@@ -282,9 +262,9 @@ class TestWhileStatement:
         assert stmt[0] == 'while'
 
     def test_while_condition(self):
-        src = "while (x == y) { x = x + 1 }"
+        src = "x = 1\ny = 2\nwhile (x == y) { x = x + 1 }"
         ast = parse_ok(src)
-        cond = ast[1][0][1]
+        cond = ast[1][2][1]
         assert cond[0] == 'int_eq'
 
     def test_while_body(self):
@@ -363,7 +343,7 @@ class TestFunctionDeclaration:
         src = "function f(x) { x = 1\ny = 2\nreturn x }"
         fn = parse_ok(src)[1][0]
         body = fn[3]
-        assert len(body) == 2  # return is separate
+        assert len(body) == 2
 
 
 # ---------------------------------------------------------------------------
@@ -442,7 +422,7 @@ class TestSyntaxErrors:
 # ---------------------------------------------------------------------------
 # 12. Parser initialisation
 # ---------------------------------------------------------------------------
-################
+
 class TestParserInit:
 
     def test_is_syntax_error_starts_false(self):
