@@ -1,7 +1,9 @@
 ﻿Program → StatementList
 
+
 StatementList → Statement StatementList
               | ε
+
 
 Statement → AssignmentStatement
           | IfStatement
@@ -9,26 +11,37 @@ Statement → AssignmentStatement
           | PrintStatement
           | FunctionDeclaration
 
+
 AssignmentStatement → IDENTIFIER "=" Expression
 
-IfStatement → "if" "(" BooleanExpression ")" "{" StatementList "}" ElseClause
+
+IfStatement → "if" "(" Expression ")" "{" StatementList "}" ElseClause
+
 
 ElseClause → "else" "{" StatementList "}"
            | ε
 
-WhileStatement → "while" "(" BooleanExpression ")" "{" StatementList "}"
+
+WhileStatement → "while" "(" Expression ")" "{" StatementList "}"
+
 
 PrintStatement → "print" "(" Expression ")"
 
-FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")" "{" StatementList ReturnStatement "}"
 
-ParameterList → IDENTIFIER
-              | IDENTIFIER "," ParameterList
+FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")"
+                      "{" StatementList ReturnStatement "}"
+
+
+ParameterList → IDENTIFIER "," ParameterList
+              | IDENTIFIER
               | ε
+
 
 ReturnStatement → "return" Expression
                 | ε
 
+
+// Note, this grammar is ambiguous, but this shall be solved using SLY precedence rules
 Expression → Expression EqualityOperation Expression
            | Expression AdditionOperation Expression
            | Expression MultiplicationOperation Expression
@@ -56,5 +69,5 @@ MultiplicationOperation → "*"
                         | "*."
                         | "/."
 
-StringExpression → STRING
-                 | StringExpression "++" StringExpression
+UnaryOperation → "-"
+               | "-."

@@ -1,0 +1,2225 @@
+Grammar:
+
+Rule 0     S' -> program
+Rule 1     program -> expr
+Rule 2     program -> statement_list
+Rule 3     statement_list -> <empty>
+Rule 4     statement_list -> statement statement_list
+Rule 5     statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+Rule 6     statement -> WHILE ( expr ) { statement_list }
+Rule 7     statement -> IF ( expr ) { statement_list } else_clause
+Rule 8     statement -> PRINT ( expr )
+Rule 9     statement -> IDENTIFIER ASSIGN expr
+Rule 10    else_clause -> <empty>
+Rule 11    else_clause -> ELSE { statement_list }
+Rule 12    param_list -> <empty>
+Rule 13    param_list -> IDENTIFIER
+Rule 14    param_list -> IDENTIFIER , param_list
+Rule 15    return_stmt -> <empty>
+Rule 16    return_stmt -> RETURN expr
+Rule 17    expr -> ( expr )
+Rule 18    expr -> BOOLEAN
+Rule 19    expr -> STRING
+Rule 20    expr -> FLOAT
+Rule 21    expr -> INTEGER
+Rule 22    expr -> IDENTIFIER
+Rule 23    expr -> FMINUS expr  [precedence=right, level=4]
+Rule 24    expr -> MINUS expr  [precedence=right, level=4]
+Rule 25    expr -> expr FNEQ expr  [precedence=left, level=1]
+Rule 26    expr -> expr FEQ expr  [precedence=left, level=1]
+Rule 27    expr -> expr NEQ expr  [precedence=left, level=1]
+Rule 28    expr -> expr EQ expr  [precedence=left, level=1]
+Rule 29    expr -> expr CONCAT expr  [precedence=left, level=2]
+Rule 30    expr -> expr FDIVIDE expr  [precedence=left, level=3]
+Rule 31    expr -> expr FTIMES expr  [precedence=left, level=3]
+Rule 32    expr -> expr FMINUS expr  [precedence=left, level=2]
+Rule 33    expr -> expr FPLUS expr  [precedence=left, level=2]
+Rule 34    expr -> expr DIVIDE expr  [precedence=left, level=3]
+Rule 35    expr -> expr TIMES expr  [precedence=left, level=3]
+Rule 36    expr -> expr MINUS expr  [precedence=left, level=2]
+Rule 37    expr -> expr PLUS expr  [precedence=left, level=2]
+
+Terminals, with rules where they appear:
+
+(                    : 5 6 7 8 17
+)                    : 5 6 7 8 17
+,                    : 14
+ASSIGN               : 9
+BOOLEAN              : 18
+CONCAT               : 29
+DIVIDE               : 34
+ELSE                 : 11
+EQ                   : 28
+FDIVIDE              : 30
+FEQ                  : 26
+FLOAT                : 20
+FMINUS               : 23 32
+FNEQ                 : 25
+FPLUS                : 33
+FTIMES               : 31
+FUNCTION             : 5
+IDENTIFIER           : 5 9 13 14 22
+IF                   : 7
+INTEGER              : 21
+MINUS                : 24 36
+NEQ                  : 27
+PLUS                 : 37
+PRINT                : 8
+RETURN               : 16
+STRING               : 19
+TIMES                : 35
+WHILE                : 6
+error                : 
+{                    : 5 6 7 11
+}                    : 5 6 7 11
+
+Nonterminals, with rules where they appear:
+
+else_clause          : 7
+expr                 : 1 6 7 8 9 16 17 23 24 25 25 26 26 27 27 28 28 29 29 30 30 31 31 32 32 33 33 34 34 35 35 36 36 37 37
+param_list           : 5 14
+program              : 0
+return_stmt          : 5
+statement            : 4
+statement_list       : 2 4 5 6 7 11
+
+
+state 0
+
+    (0) S' -> . program
+    (1) program -> . expr
+    (2) program -> . statement_list
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 9
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+    $end            reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+
+    program                        shift and go to state 1
+    expr                           shift and go to state 2
+    statement_list                 shift and go to state 3
+    statement                      shift and go to state 12
+
+state 1
+
+    (0) S' -> program .
+
+
+state 2
+
+    (1) program -> expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    $end            reduce using rule 1 (program -> expr .)
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 3
+
+    (2) program -> statement_list .
+    $end            reduce using rule 2 (program -> statement_list .)
+
+
+state 4
+
+    (17) expr -> ( . expr )
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 30
+
+state 5
+
+    (18) expr -> BOOLEAN .
+    FNEQ            reduce using rule 18 (expr -> BOOLEAN .)
+    FEQ             reduce using rule 18 (expr -> BOOLEAN .)
+    NEQ             reduce using rule 18 (expr -> BOOLEAN .)
+    EQ              reduce using rule 18 (expr -> BOOLEAN .)
+    CONCAT          reduce using rule 18 (expr -> BOOLEAN .)
+    FDIVIDE         reduce using rule 18 (expr -> BOOLEAN .)
+    FTIMES          reduce using rule 18 (expr -> BOOLEAN .)
+    FMINUS          reduce using rule 18 (expr -> BOOLEAN .)
+    FPLUS           reduce using rule 18 (expr -> BOOLEAN .)
+    DIVIDE          reduce using rule 18 (expr -> BOOLEAN .)
+    TIMES           reduce using rule 18 (expr -> BOOLEAN .)
+    MINUS           reduce using rule 18 (expr -> BOOLEAN .)
+    PLUS            reduce using rule 18 (expr -> BOOLEAN .)
+    $end            reduce using rule 18 (expr -> BOOLEAN .)
+    )               reduce using rule 18 (expr -> BOOLEAN .)
+    FUNCTION        reduce using rule 18 (expr -> BOOLEAN .)
+    WHILE           reduce using rule 18 (expr -> BOOLEAN .)
+    IF              reduce using rule 18 (expr -> BOOLEAN .)
+    PRINT           reduce using rule 18 (expr -> BOOLEAN .)
+    IDENTIFIER      reduce using rule 18 (expr -> BOOLEAN .)
+    }               reduce using rule 18 (expr -> BOOLEAN .)
+    RETURN          reduce using rule 18 (expr -> BOOLEAN .)
+
+
+state 6
+
+    (19) expr -> STRING .
+    FNEQ            reduce using rule 19 (expr -> STRING .)
+    FEQ             reduce using rule 19 (expr -> STRING .)
+    NEQ             reduce using rule 19 (expr -> STRING .)
+    EQ              reduce using rule 19 (expr -> STRING .)
+    CONCAT          reduce using rule 19 (expr -> STRING .)
+    FDIVIDE         reduce using rule 19 (expr -> STRING .)
+    FTIMES          reduce using rule 19 (expr -> STRING .)
+    FMINUS          reduce using rule 19 (expr -> STRING .)
+    FPLUS           reduce using rule 19 (expr -> STRING .)
+    DIVIDE          reduce using rule 19 (expr -> STRING .)
+    TIMES           reduce using rule 19 (expr -> STRING .)
+    MINUS           reduce using rule 19 (expr -> STRING .)
+    PLUS            reduce using rule 19 (expr -> STRING .)
+    $end            reduce using rule 19 (expr -> STRING .)
+    )               reduce using rule 19 (expr -> STRING .)
+    FUNCTION        reduce using rule 19 (expr -> STRING .)
+    WHILE           reduce using rule 19 (expr -> STRING .)
+    IF              reduce using rule 19 (expr -> STRING .)
+    PRINT           reduce using rule 19 (expr -> STRING .)
+    IDENTIFIER      reduce using rule 19 (expr -> STRING .)
+    }               reduce using rule 19 (expr -> STRING .)
+    RETURN          reduce using rule 19 (expr -> STRING .)
+
+
+state 7
+
+    (20) expr -> FLOAT .
+    FNEQ            reduce using rule 20 (expr -> FLOAT .)
+    FEQ             reduce using rule 20 (expr -> FLOAT .)
+    NEQ             reduce using rule 20 (expr -> FLOAT .)
+    EQ              reduce using rule 20 (expr -> FLOAT .)
+    CONCAT          reduce using rule 20 (expr -> FLOAT .)
+    FDIVIDE         reduce using rule 20 (expr -> FLOAT .)
+    FTIMES          reduce using rule 20 (expr -> FLOAT .)
+    FMINUS          reduce using rule 20 (expr -> FLOAT .)
+    FPLUS           reduce using rule 20 (expr -> FLOAT .)
+    DIVIDE          reduce using rule 20 (expr -> FLOAT .)
+    TIMES           reduce using rule 20 (expr -> FLOAT .)
+    MINUS           reduce using rule 20 (expr -> FLOAT .)
+    PLUS            reduce using rule 20 (expr -> FLOAT .)
+    $end            reduce using rule 20 (expr -> FLOAT .)
+    )               reduce using rule 20 (expr -> FLOAT .)
+    FUNCTION        reduce using rule 20 (expr -> FLOAT .)
+    WHILE           reduce using rule 20 (expr -> FLOAT .)
+    IF              reduce using rule 20 (expr -> FLOAT .)
+    PRINT           reduce using rule 20 (expr -> FLOAT .)
+    IDENTIFIER      reduce using rule 20 (expr -> FLOAT .)
+    }               reduce using rule 20 (expr -> FLOAT .)
+    RETURN          reduce using rule 20 (expr -> FLOAT .)
+
+
+state 8
+
+    (21) expr -> INTEGER .
+    FNEQ            reduce using rule 21 (expr -> INTEGER .)
+    FEQ             reduce using rule 21 (expr -> INTEGER .)
+    NEQ             reduce using rule 21 (expr -> INTEGER .)
+    EQ              reduce using rule 21 (expr -> INTEGER .)
+    CONCAT          reduce using rule 21 (expr -> INTEGER .)
+    FDIVIDE         reduce using rule 21 (expr -> INTEGER .)
+    FTIMES          reduce using rule 21 (expr -> INTEGER .)
+    FMINUS          reduce using rule 21 (expr -> INTEGER .)
+    FPLUS           reduce using rule 21 (expr -> INTEGER .)
+    DIVIDE          reduce using rule 21 (expr -> INTEGER .)
+    TIMES           reduce using rule 21 (expr -> INTEGER .)
+    MINUS           reduce using rule 21 (expr -> INTEGER .)
+    PLUS            reduce using rule 21 (expr -> INTEGER .)
+    $end            reduce using rule 21 (expr -> INTEGER .)
+    )               reduce using rule 21 (expr -> INTEGER .)
+    FUNCTION        reduce using rule 21 (expr -> INTEGER .)
+    WHILE           reduce using rule 21 (expr -> INTEGER .)
+    IF              reduce using rule 21 (expr -> INTEGER .)
+    PRINT           reduce using rule 21 (expr -> INTEGER .)
+    IDENTIFIER      reduce using rule 21 (expr -> INTEGER .)
+    }               reduce using rule 21 (expr -> INTEGER .)
+    RETURN          reduce using rule 21 (expr -> INTEGER .)
+
+
+state 9
+
+    (22) expr -> IDENTIFIER .
+    (9) statement -> IDENTIFIER . ASSIGN expr
+    FNEQ            reduce using rule 22 (expr -> IDENTIFIER .)
+    FEQ             reduce using rule 22 (expr -> IDENTIFIER .)
+    NEQ             reduce using rule 22 (expr -> IDENTIFIER .)
+    EQ              reduce using rule 22 (expr -> IDENTIFIER .)
+    CONCAT          reduce using rule 22 (expr -> IDENTIFIER .)
+    FDIVIDE         reduce using rule 22 (expr -> IDENTIFIER .)
+    FTIMES          reduce using rule 22 (expr -> IDENTIFIER .)
+    FMINUS          reduce using rule 22 (expr -> IDENTIFIER .)
+    FPLUS           reduce using rule 22 (expr -> IDENTIFIER .)
+    DIVIDE          reduce using rule 22 (expr -> IDENTIFIER .)
+    TIMES           reduce using rule 22 (expr -> IDENTIFIER .)
+    MINUS           reduce using rule 22 (expr -> IDENTIFIER .)
+    PLUS            reduce using rule 22 (expr -> IDENTIFIER .)
+    $end            reduce using rule 22 (expr -> IDENTIFIER .)
+    ASSIGN          shift and go to state 32
+
+
+state 10
+
+    (23) expr -> FMINUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 33
+
+state 11
+
+    (24) expr -> MINUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 34
+
+state 12
+
+    (4) statement_list -> statement . statement_list
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    $end            reduce using rule 3 (statement_list -> .)
+    }               reduce using rule 3 (statement_list -> .)
+    RETURN          reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+    IDENTIFIER      shift and go to state 36
+
+    statement                      shift and go to state 12
+    statement_list                 shift and go to state 35
+
+state 13
+
+    (5) statement -> FUNCTION . IDENTIFIER ( param_list ) { statement_list return_stmt }
+    IDENTIFIER      shift and go to state 37
+
+
+state 14
+
+    (6) statement -> WHILE . ( expr ) { statement_list }
+    (               shift and go to state 38
+
+
+state 15
+
+    (7) statement -> IF . ( expr ) { statement_list } else_clause
+    (               shift and go to state 39
+
+
+state 16
+
+    (8) statement -> PRINT . ( expr )
+    (               shift and go to state 40
+
+
+state 17
+
+    (25) expr -> expr FNEQ . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 41
+
+state 18
+
+    (26) expr -> expr FEQ . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 42
+
+state 19
+
+    (27) expr -> expr NEQ . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 43
+
+state 20
+
+    (28) expr -> expr EQ . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 44
+
+state 21
+
+    (29) expr -> expr CONCAT . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 45
+
+state 22
+
+    (30) expr -> expr FDIVIDE . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 46
+
+state 23
+
+    (31) expr -> expr FTIMES . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 47
+
+state 24
+
+    (32) expr -> expr FMINUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 48
+
+state 25
+
+    (33) expr -> expr FPLUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 49
+
+state 26
+
+    (34) expr -> expr DIVIDE . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 50
+
+state 27
+
+    (35) expr -> expr TIMES . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 51
+
+state 28
+
+    (36) expr -> expr MINUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 52
+
+state 29
+
+    (37) expr -> expr PLUS . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 53
+
+state 30
+
+    (17) expr -> ( expr . )
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    )               shift and go to state 54
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 31
+
+    (22) expr -> IDENTIFIER .
+    )               reduce using rule 22 (expr -> IDENTIFIER .)
+    FNEQ            reduce using rule 22 (expr -> IDENTIFIER .)
+    FEQ             reduce using rule 22 (expr -> IDENTIFIER .)
+    NEQ             reduce using rule 22 (expr -> IDENTIFIER .)
+    EQ              reduce using rule 22 (expr -> IDENTIFIER .)
+    CONCAT          reduce using rule 22 (expr -> IDENTIFIER .)
+    FDIVIDE         reduce using rule 22 (expr -> IDENTIFIER .)
+    FTIMES          reduce using rule 22 (expr -> IDENTIFIER .)
+    FMINUS          reduce using rule 22 (expr -> IDENTIFIER .)
+    FPLUS           reduce using rule 22 (expr -> IDENTIFIER .)
+    DIVIDE          reduce using rule 22 (expr -> IDENTIFIER .)
+    TIMES           reduce using rule 22 (expr -> IDENTIFIER .)
+    MINUS           reduce using rule 22 (expr -> IDENTIFIER .)
+    PLUS            reduce using rule 22 (expr -> IDENTIFIER .)
+    $end            reduce using rule 22 (expr -> IDENTIFIER .)
+    FUNCTION        reduce using rule 22 (expr -> IDENTIFIER .)
+    WHILE           reduce using rule 22 (expr -> IDENTIFIER .)
+    IF              reduce using rule 22 (expr -> IDENTIFIER .)
+    PRINT           reduce using rule 22 (expr -> IDENTIFIER .)
+    IDENTIFIER      reduce using rule 22 (expr -> IDENTIFIER .)
+    }               reduce using rule 22 (expr -> IDENTIFIER .)
+    RETURN          reduce using rule 22 (expr -> IDENTIFIER .)
+
+
+state 32
+
+    (9) statement -> IDENTIFIER ASSIGN . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 55
+
+state 33
+
+    (23) expr -> FMINUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 23 (expr -> FMINUS expr .)
+    FEQ             reduce using rule 23 (expr -> FMINUS expr .)
+    NEQ             reduce using rule 23 (expr -> FMINUS expr .)
+    EQ              reduce using rule 23 (expr -> FMINUS expr .)
+    CONCAT          reduce using rule 23 (expr -> FMINUS expr .)
+    FDIVIDE         reduce using rule 23 (expr -> FMINUS expr .)
+    FTIMES          reduce using rule 23 (expr -> FMINUS expr .)
+    FMINUS          reduce using rule 23 (expr -> FMINUS expr .)
+    FPLUS           reduce using rule 23 (expr -> FMINUS expr .)
+    DIVIDE          reduce using rule 23 (expr -> FMINUS expr .)
+    TIMES           reduce using rule 23 (expr -> FMINUS expr .)
+    MINUS           reduce using rule 23 (expr -> FMINUS expr .)
+    PLUS            reduce using rule 23 (expr -> FMINUS expr .)
+    $end            reduce using rule 23 (expr -> FMINUS expr .)
+    )               reduce using rule 23 (expr -> FMINUS expr .)
+    FUNCTION        reduce using rule 23 (expr -> FMINUS expr .)
+    WHILE           reduce using rule 23 (expr -> FMINUS expr .)
+    IF              reduce using rule 23 (expr -> FMINUS expr .)
+    PRINT           reduce using rule 23 (expr -> FMINUS expr .)
+    IDENTIFIER      reduce using rule 23 (expr -> FMINUS expr .)
+    }               reduce using rule 23 (expr -> FMINUS expr .)
+    RETURN          reduce using rule 23 (expr -> FMINUS expr .)
+
+
+state 34
+
+    (24) expr -> MINUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 24 (expr -> MINUS expr .)
+    FEQ             reduce using rule 24 (expr -> MINUS expr .)
+    NEQ             reduce using rule 24 (expr -> MINUS expr .)
+    EQ              reduce using rule 24 (expr -> MINUS expr .)
+    CONCAT          reduce using rule 24 (expr -> MINUS expr .)
+    FDIVIDE         reduce using rule 24 (expr -> MINUS expr .)
+    FTIMES          reduce using rule 24 (expr -> MINUS expr .)
+    FMINUS          reduce using rule 24 (expr -> MINUS expr .)
+    FPLUS           reduce using rule 24 (expr -> MINUS expr .)
+    DIVIDE          reduce using rule 24 (expr -> MINUS expr .)
+    TIMES           reduce using rule 24 (expr -> MINUS expr .)
+    MINUS           reduce using rule 24 (expr -> MINUS expr .)
+    PLUS            reduce using rule 24 (expr -> MINUS expr .)
+    $end            reduce using rule 24 (expr -> MINUS expr .)
+    )               reduce using rule 24 (expr -> MINUS expr .)
+    FUNCTION        reduce using rule 24 (expr -> MINUS expr .)
+    WHILE           reduce using rule 24 (expr -> MINUS expr .)
+    IF              reduce using rule 24 (expr -> MINUS expr .)
+    PRINT           reduce using rule 24 (expr -> MINUS expr .)
+    IDENTIFIER      reduce using rule 24 (expr -> MINUS expr .)
+    }               reduce using rule 24 (expr -> MINUS expr .)
+    RETURN          reduce using rule 24 (expr -> MINUS expr .)
+
+
+state 35
+
+    (4) statement_list -> statement statement_list .
+    $end            reduce using rule 4 (statement_list -> statement statement_list .)
+    }               reduce using rule 4 (statement_list -> statement statement_list .)
+    RETURN          reduce using rule 4 (statement_list -> statement statement_list .)
+
+
+state 36
+
+    (9) statement -> IDENTIFIER . ASSIGN expr
+    ASSIGN          shift and go to state 32
+
+
+state 37
+
+    (5) statement -> FUNCTION IDENTIFIER . ( param_list ) { statement_list return_stmt }
+    (               shift and go to state 56
+
+
+state 38
+
+    (6) statement -> WHILE ( . expr ) { statement_list }
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 57
+
+state 39
+
+    (7) statement -> IF ( . expr ) { statement_list } else_clause
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 58
+
+state 40
+
+    (8) statement -> PRINT ( . expr )
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 59
+
+state 41
+
+    (25) expr -> expr FNEQ expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 25 (expr -> expr FNEQ expr .)
+    FEQ             reduce using rule 25 (expr -> expr FNEQ expr .)
+    NEQ             reduce using rule 25 (expr -> expr FNEQ expr .)
+    EQ              reduce using rule 25 (expr -> expr FNEQ expr .)
+    $end            reduce using rule 25 (expr -> expr FNEQ expr .)
+    )               reduce using rule 25 (expr -> expr FNEQ expr .)
+    FUNCTION        reduce using rule 25 (expr -> expr FNEQ expr .)
+    WHILE           reduce using rule 25 (expr -> expr FNEQ expr .)
+    IF              reduce using rule 25 (expr -> expr FNEQ expr .)
+    PRINT           reduce using rule 25 (expr -> expr FNEQ expr .)
+    IDENTIFIER      reduce using rule 25 (expr -> expr FNEQ expr .)
+    }               reduce using rule 25 (expr -> expr FNEQ expr .)
+    RETURN          reduce using rule 25 (expr -> expr FNEQ expr .)
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 42
+
+    (26) expr -> expr FEQ expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 26 (expr -> expr FEQ expr .)
+    FEQ             reduce using rule 26 (expr -> expr FEQ expr .)
+    NEQ             reduce using rule 26 (expr -> expr FEQ expr .)
+    EQ              reduce using rule 26 (expr -> expr FEQ expr .)
+    $end            reduce using rule 26 (expr -> expr FEQ expr .)
+    )               reduce using rule 26 (expr -> expr FEQ expr .)
+    FUNCTION        reduce using rule 26 (expr -> expr FEQ expr .)
+    WHILE           reduce using rule 26 (expr -> expr FEQ expr .)
+    IF              reduce using rule 26 (expr -> expr FEQ expr .)
+    PRINT           reduce using rule 26 (expr -> expr FEQ expr .)
+    IDENTIFIER      reduce using rule 26 (expr -> expr FEQ expr .)
+    }               reduce using rule 26 (expr -> expr FEQ expr .)
+    RETURN          reduce using rule 26 (expr -> expr FEQ expr .)
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 43
+
+    (27) expr -> expr NEQ expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 27 (expr -> expr NEQ expr .)
+    FEQ             reduce using rule 27 (expr -> expr NEQ expr .)
+    NEQ             reduce using rule 27 (expr -> expr NEQ expr .)
+    EQ              reduce using rule 27 (expr -> expr NEQ expr .)
+    $end            reduce using rule 27 (expr -> expr NEQ expr .)
+    )               reduce using rule 27 (expr -> expr NEQ expr .)
+    FUNCTION        reduce using rule 27 (expr -> expr NEQ expr .)
+    WHILE           reduce using rule 27 (expr -> expr NEQ expr .)
+    IF              reduce using rule 27 (expr -> expr NEQ expr .)
+    PRINT           reduce using rule 27 (expr -> expr NEQ expr .)
+    IDENTIFIER      reduce using rule 27 (expr -> expr NEQ expr .)
+    }               reduce using rule 27 (expr -> expr NEQ expr .)
+    RETURN          reduce using rule 27 (expr -> expr NEQ expr .)
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 44
+
+    (28) expr -> expr EQ expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 28 (expr -> expr EQ expr .)
+    FEQ             reduce using rule 28 (expr -> expr EQ expr .)
+    NEQ             reduce using rule 28 (expr -> expr EQ expr .)
+    EQ              reduce using rule 28 (expr -> expr EQ expr .)
+    $end            reduce using rule 28 (expr -> expr EQ expr .)
+    )               reduce using rule 28 (expr -> expr EQ expr .)
+    FUNCTION        reduce using rule 28 (expr -> expr EQ expr .)
+    WHILE           reduce using rule 28 (expr -> expr EQ expr .)
+    IF              reduce using rule 28 (expr -> expr EQ expr .)
+    PRINT           reduce using rule 28 (expr -> expr EQ expr .)
+    IDENTIFIER      reduce using rule 28 (expr -> expr EQ expr .)
+    }               reduce using rule 28 (expr -> expr EQ expr .)
+    RETURN          reduce using rule 28 (expr -> expr EQ expr .)
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 45
+
+    (29) expr -> expr CONCAT expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 29 (expr -> expr CONCAT expr .)
+    FEQ             reduce using rule 29 (expr -> expr CONCAT expr .)
+    NEQ             reduce using rule 29 (expr -> expr CONCAT expr .)
+    EQ              reduce using rule 29 (expr -> expr CONCAT expr .)
+    CONCAT          reduce using rule 29 (expr -> expr CONCAT expr .)
+    FMINUS          reduce using rule 29 (expr -> expr CONCAT expr .)
+    FPLUS           reduce using rule 29 (expr -> expr CONCAT expr .)
+    MINUS           reduce using rule 29 (expr -> expr CONCAT expr .)
+    PLUS            reduce using rule 29 (expr -> expr CONCAT expr .)
+    $end            reduce using rule 29 (expr -> expr CONCAT expr .)
+    )               reduce using rule 29 (expr -> expr CONCAT expr .)
+    FUNCTION        reduce using rule 29 (expr -> expr CONCAT expr .)
+    WHILE           reduce using rule 29 (expr -> expr CONCAT expr .)
+    IF              reduce using rule 29 (expr -> expr CONCAT expr .)
+    PRINT           reduce using rule 29 (expr -> expr CONCAT expr .)
+    IDENTIFIER      reduce using rule 29 (expr -> expr CONCAT expr .)
+    }               reduce using rule 29 (expr -> expr CONCAT expr .)
+    RETURN          reduce using rule 29 (expr -> expr CONCAT expr .)
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+
+
+state 46
+
+    (30) expr -> expr FDIVIDE expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FEQ             reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    NEQ             reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    EQ              reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    CONCAT          reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FDIVIDE         reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FTIMES          reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FMINUS          reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FPLUS           reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    DIVIDE          reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    TIMES           reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    MINUS           reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    PLUS            reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    $end            reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    )               reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    FUNCTION        reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    WHILE           reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    IF              reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    PRINT           reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    IDENTIFIER      reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    }               reduce using rule 30 (expr -> expr FDIVIDE expr .)
+    RETURN          reduce using rule 30 (expr -> expr FDIVIDE expr .)
+
+
+state 47
+
+    (31) expr -> expr FTIMES expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 31 (expr -> expr FTIMES expr .)
+    FEQ             reduce using rule 31 (expr -> expr FTIMES expr .)
+    NEQ             reduce using rule 31 (expr -> expr FTIMES expr .)
+    EQ              reduce using rule 31 (expr -> expr FTIMES expr .)
+    CONCAT          reduce using rule 31 (expr -> expr FTIMES expr .)
+    FDIVIDE         reduce using rule 31 (expr -> expr FTIMES expr .)
+    FTIMES          reduce using rule 31 (expr -> expr FTIMES expr .)
+    FMINUS          reduce using rule 31 (expr -> expr FTIMES expr .)
+    FPLUS           reduce using rule 31 (expr -> expr FTIMES expr .)
+    DIVIDE          reduce using rule 31 (expr -> expr FTIMES expr .)
+    TIMES           reduce using rule 31 (expr -> expr FTIMES expr .)
+    MINUS           reduce using rule 31 (expr -> expr FTIMES expr .)
+    PLUS            reduce using rule 31 (expr -> expr FTIMES expr .)
+    $end            reduce using rule 31 (expr -> expr FTIMES expr .)
+    )               reduce using rule 31 (expr -> expr FTIMES expr .)
+    FUNCTION        reduce using rule 31 (expr -> expr FTIMES expr .)
+    WHILE           reduce using rule 31 (expr -> expr FTIMES expr .)
+    IF              reduce using rule 31 (expr -> expr FTIMES expr .)
+    PRINT           reduce using rule 31 (expr -> expr FTIMES expr .)
+    IDENTIFIER      reduce using rule 31 (expr -> expr FTIMES expr .)
+    }               reduce using rule 31 (expr -> expr FTIMES expr .)
+    RETURN          reduce using rule 31 (expr -> expr FTIMES expr .)
+
+
+state 48
+
+    (32) expr -> expr FMINUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 32 (expr -> expr FMINUS expr .)
+    FEQ             reduce using rule 32 (expr -> expr FMINUS expr .)
+    NEQ             reduce using rule 32 (expr -> expr FMINUS expr .)
+    EQ              reduce using rule 32 (expr -> expr FMINUS expr .)
+    CONCAT          reduce using rule 32 (expr -> expr FMINUS expr .)
+    FMINUS          reduce using rule 32 (expr -> expr FMINUS expr .)
+    FPLUS           reduce using rule 32 (expr -> expr FMINUS expr .)
+    MINUS           reduce using rule 32 (expr -> expr FMINUS expr .)
+    PLUS            reduce using rule 32 (expr -> expr FMINUS expr .)
+    $end            reduce using rule 32 (expr -> expr FMINUS expr .)
+    )               reduce using rule 32 (expr -> expr FMINUS expr .)
+    FUNCTION        reduce using rule 32 (expr -> expr FMINUS expr .)
+    WHILE           reduce using rule 32 (expr -> expr FMINUS expr .)
+    IF              reduce using rule 32 (expr -> expr FMINUS expr .)
+    PRINT           reduce using rule 32 (expr -> expr FMINUS expr .)
+    IDENTIFIER      reduce using rule 32 (expr -> expr FMINUS expr .)
+    }               reduce using rule 32 (expr -> expr FMINUS expr .)
+    RETURN          reduce using rule 32 (expr -> expr FMINUS expr .)
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+
+
+state 49
+
+    (33) expr -> expr FPLUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 33 (expr -> expr FPLUS expr .)
+    FEQ             reduce using rule 33 (expr -> expr FPLUS expr .)
+    NEQ             reduce using rule 33 (expr -> expr FPLUS expr .)
+    EQ              reduce using rule 33 (expr -> expr FPLUS expr .)
+    CONCAT          reduce using rule 33 (expr -> expr FPLUS expr .)
+    FMINUS          reduce using rule 33 (expr -> expr FPLUS expr .)
+    FPLUS           reduce using rule 33 (expr -> expr FPLUS expr .)
+    MINUS           reduce using rule 33 (expr -> expr FPLUS expr .)
+    PLUS            reduce using rule 33 (expr -> expr FPLUS expr .)
+    $end            reduce using rule 33 (expr -> expr FPLUS expr .)
+    )               reduce using rule 33 (expr -> expr FPLUS expr .)
+    FUNCTION        reduce using rule 33 (expr -> expr FPLUS expr .)
+    WHILE           reduce using rule 33 (expr -> expr FPLUS expr .)
+    IF              reduce using rule 33 (expr -> expr FPLUS expr .)
+    PRINT           reduce using rule 33 (expr -> expr FPLUS expr .)
+    IDENTIFIER      reduce using rule 33 (expr -> expr FPLUS expr .)
+    }               reduce using rule 33 (expr -> expr FPLUS expr .)
+    RETURN          reduce using rule 33 (expr -> expr FPLUS expr .)
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+
+
+state 50
+
+    (34) expr -> expr DIVIDE expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FEQ             reduce using rule 34 (expr -> expr DIVIDE expr .)
+    NEQ             reduce using rule 34 (expr -> expr DIVIDE expr .)
+    EQ              reduce using rule 34 (expr -> expr DIVIDE expr .)
+    CONCAT          reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FDIVIDE         reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FTIMES          reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FMINUS          reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FPLUS           reduce using rule 34 (expr -> expr DIVIDE expr .)
+    DIVIDE          reduce using rule 34 (expr -> expr DIVIDE expr .)
+    TIMES           reduce using rule 34 (expr -> expr DIVIDE expr .)
+    MINUS           reduce using rule 34 (expr -> expr DIVIDE expr .)
+    PLUS            reduce using rule 34 (expr -> expr DIVIDE expr .)
+    $end            reduce using rule 34 (expr -> expr DIVIDE expr .)
+    )               reduce using rule 34 (expr -> expr DIVIDE expr .)
+    FUNCTION        reduce using rule 34 (expr -> expr DIVIDE expr .)
+    WHILE           reduce using rule 34 (expr -> expr DIVIDE expr .)
+    IF              reduce using rule 34 (expr -> expr DIVIDE expr .)
+    PRINT           reduce using rule 34 (expr -> expr DIVIDE expr .)
+    IDENTIFIER      reduce using rule 34 (expr -> expr DIVIDE expr .)
+    }               reduce using rule 34 (expr -> expr DIVIDE expr .)
+    RETURN          reduce using rule 34 (expr -> expr DIVIDE expr .)
+
+
+state 51
+
+    (35) expr -> expr TIMES expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 35 (expr -> expr TIMES expr .)
+    FEQ             reduce using rule 35 (expr -> expr TIMES expr .)
+    NEQ             reduce using rule 35 (expr -> expr TIMES expr .)
+    EQ              reduce using rule 35 (expr -> expr TIMES expr .)
+    CONCAT          reduce using rule 35 (expr -> expr TIMES expr .)
+    FDIVIDE         reduce using rule 35 (expr -> expr TIMES expr .)
+    FTIMES          reduce using rule 35 (expr -> expr TIMES expr .)
+    FMINUS          reduce using rule 35 (expr -> expr TIMES expr .)
+    FPLUS           reduce using rule 35 (expr -> expr TIMES expr .)
+    DIVIDE          reduce using rule 35 (expr -> expr TIMES expr .)
+    TIMES           reduce using rule 35 (expr -> expr TIMES expr .)
+    MINUS           reduce using rule 35 (expr -> expr TIMES expr .)
+    PLUS            reduce using rule 35 (expr -> expr TIMES expr .)
+    $end            reduce using rule 35 (expr -> expr TIMES expr .)
+    )               reduce using rule 35 (expr -> expr TIMES expr .)
+    FUNCTION        reduce using rule 35 (expr -> expr TIMES expr .)
+    WHILE           reduce using rule 35 (expr -> expr TIMES expr .)
+    IF              reduce using rule 35 (expr -> expr TIMES expr .)
+    PRINT           reduce using rule 35 (expr -> expr TIMES expr .)
+    IDENTIFIER      reduce using rule 35 (expr -> expr TIMES expr .)
+    }               reduce using rule 35 (expr -> expr TIMES expr .)
+    RETURN          reduce using rule 35 (expr -> expr TIMES expr .)
+
+
+state 52
+
+    (36) expr -> expr MINUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 36 (expr -> expr MINUS expr .)
+    FEQ             reduce using rule 36 (expr -> expr MINUS expr .)
+    NEQ             reduce using rule 36 (expr -> expr MINUS expr .)
+    EQ              reduce using rule 36 (expr -> expr MINUS expr .)
+    CONCAT          reduce using rule 36 (expr -> expr MINUS expr .)
+    FMINUS          reduce using rule 36 (expr -> expr MINUS expr .)
+    FPLUS           reduce using rule 36 (expr -> expr MINUS expr .)
+    MINUS           reduce using rule 36 (expr -> expr MINUS expr .)
+    PLUS            reduce using rule 36 (expr -> expr MINUS expr .)
+    $end            reduce using rule 36 (expr -> expr MINUS expr .)
+    )               reduce using rule 36 (expr -> expr MINUS expr .)
+    FUNCTION        reduce using rule 36 (expr -> expr MINUS expr .)
+    WHILE           reduce using rule 36 (expr -> expr MINUS expr .)
+    IF              reduce using rule 36 (expr -> expr MINUS expr .)
+    PRINT           reduce using rule 36 (expr -> expr MINUS expr .)
+    IDENTIFIER      reduce using rule 36 (expr -> expr MINUS expr .)
+    }               reduce using rule 36 (expr -> expr MINUS expr .)
+    RETURN          reduce using rule 36 (expr -> expr MINUS expr .)
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+
+
+state 53
+
+    (37) expr -> expr PLUS expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FNEQ            reduce using rule 37 (expr -> expr PLUS expr .)
+    FEQ             reduce using rule 37 (expr -> expr PLUS expr .)
+    NEQ             reduce using rule 37 (expr -> expr PLUS expr .)
+    EQ              reduce using rule 37 (expr -> expr PLUS expr .)
+    CONCAT          reduce using rule 37 (expr -> expr PLUS expr .)
+    FMINUS          reduce using rule 37 (expr -> expr PLUS expr .)
+    FPLUS           reduce using rule 37 (expr -> expr PLUS expr .)
+    MINUS           reduce using rule 37 (expr -> expr PLUS expr .)
+    PLUS            reduce using rule 37 (expr -> expr PLUS expr .)
+    $end            reduce using rule 37 (expr -> expr PLUS expr .)
+    )               reduce using rule 37 (expr -> expr PLUS expr .)
+    FUNCTION        reduce using rule 37 (expr -> expr PLUS expr .)
+    WHILE           reduce using rule 37 (expr -> expr PLUS expr .)
+    IF              reduce using rule 37 (expr -> expr PLUS expr .)
+    PRINT           reduce using rule 37 (expr -> expr PLUS expr .)
+    IDENTIFIER      reduce using rule 37 (expr -> expr PLUS expr .)
+    }               reduce using rule 37 (expr -> expr PLUS expr .)
+    RETURN          reduce using rule 37 (expr -> expr PLUS expr .)
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+
+
+state 54
+
+    (17) expr -> ( expr ) .
+    FNEQ            reduce using rule 17 (expr -> ( expr ) .)
+    FEQ             reduce using rule 17 (expr -> ( expr ) .)
+    NEQ             reduce using rule 17 (expr -> ( expr ) .)
+    EQ              reduce using rule 17 (expr -> ( expr ) .)
+    CONCAT          reduce using rule 17 (expr -> ( expr ) .)
+    FDIVIDE         reduce using rule 17 (expr -> ( expr ) .)
+    FTIMES          reduce using rule 17 (expr -> ( expr ) .)
+    FMINUS          reduce using rule 17 (expr -> ( expr ) .)
+    FPLUS           reduce using rule 17 (expr -> ( expr ) .)
+    DIVIDE          reduce using rule 17 (expr -> ( expr ) .)
+    TIMES           reduce using rule 17 (expr -> ( expr ) .)
+    MINUS           reduce using rule 17 (expr -> ( expr ) .)
+    PLUS            reduce using rule 17 (expr -> ( expr ) .)
+    $end            reduce using rule 17 (expr -> ( expr ) .)
+    )               reduce using rule 17 (expr -> ( expr ) .)
+    FUNCTION        reduce using rule 17 (expr -> ( expr ) .)
+    WHILE           reduce using rule 17 (expr -> ( expr ) .)
+    IF              reduce using rule 17 (expr -> ( expr ) .)
+    PRINT           reduce using rule 17 (expr -> ( expr ) .)
+    IDENTIFIER      reduce using rule 17 (expr -> ( expr ) .)
+    }               reduce using rule 17 (expr -> ( expr ) .)
+    RETURN          reduce using rule 17 (expr -> ( expr ) .)
+
+
+state 55
+
+    (9) statement -> IDENTIFIER ASSIGN expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    FUNCTION        reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    WHILE           reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    IF              reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    PRINT           reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    IDENTIFIER      reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    $end            reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    }               reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    RETURN          reduce using rule 9 (statement -> IDENTIFIER ASSIGN expr .)
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 56
+
+    (5) statement -> FUNCTION IDENTIFIER ( . param_list ) { statement_list return_stmt }
+    (12) param_list -> .
+    (13) param_list -> . IDENTIFIER
+    (14) param_list -> . IDENTIFIER , param_list
+    )               reduce using rule 12 (param_list -> .)
+    IDENTIFIER      shift and go to state 60
+
+    param_list                     shift and go to state 61
+
+state 57
+
+    (6) statement -> WHILE ( expr . ) { statement_list }
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    )               shift and go to state 62
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 58
+
+    (7) statement -> IF ( expr . ) { statement_list } else_clause
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    )               shift and go to state 63
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 59
+
+    (8) statement -> PRINT ( expr . )
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    )               shift and go to state 64
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 60
+
+    (13) param_list -> IDENTIFIER .
+    (14) param_list -> IDENTIFIER . , param_list
+    )               reduce using rule 13 (param_list -> IDENTIFIER .)
+    ,               shift and go to state 65
+
+
+state 61
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list . ) { statement_list return_stmt }
+    )               shift and go to state 66
+
+
+state 62
+
+    (6) statement -> WHILE ( expr ) . { statement_list }
+    {               shift and go to state 67
+
+
+state 63
+
+    (7) statement -> IF ( expr ) . { statement_list } else_clause
+    {               shift and go to state 68
+
+
+state 64
+
+    (8) statement -> PRINT ( expr ) .
+    FUNCTION        reduce using rule 8 (statement -> PRINT ( expr ) .)
+    WHILE           reduce using rule 8 (statement -> PRINT ( expr ) .)
+    IF              reduce using rule 8 (statement -> PRINT ( expr ) .)
+    PRINT           reduce using rule 8 (statement -> PRINT ( expr ) .)
+    IDENTIFIER      reduce using rule 8 (statement -> PRINT ( expr ) .)
+    $end            reduce using rule 8 (statement -> PRINT ( expr ) .)
+    }               reduce using rule 8 (statement -> PRINT ( expr ) .)
+    RETURN          reduce using rule 8 (statement -> PRINT ( expr ) .)
+
+
+state 65
+
+    (14) param_list -> IDENTIFIER , . param_list
+    (12) param_list -> .
+    (13) param_list -> . IDENTIFIER
+    (14) param_list -> . IDENTIFIER , param_list
+    )               reduce using rule 12 (param_list -> .)
+    IDENTIFIER      shift and go to state 60
+
+    param_list                     shift and go to state 69
+
+state 66
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list ) . { statement_list return_stmt }
+    {               shift and go to state 70
+
+
+state 67
+
+    (6) statement -> WHILE ( expr ) { . statement_list }
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    }               reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+    IDENTIFIER      shift and go to state 36
+
+    statement_list                 shift and go to state 71
+    statement                      shift and go to state 12
+
+state 68
+
+    (7) statement -> IF ( expr ) { . statement_list } else_clause
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    }               reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+    IDENTIFIER      shift and go to state 36
+
+    statement_list                 shift and go to state 72
+    statement                      shift and go to state 12
+
+state 69
+
+    (14) param_list -> IDENTIFIER , param_list .
+    )               reduce using rule 14 (param_list -> IDENTIFIER , param_list .)
+
+
+state 70
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list ) { . statement_list return_stmt }
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    RETURN          reduce using rule 3 (statement_list -> .)
+    }               reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+    IDENTIFIER      shift and go to state 36
+
+    statement_list                 shift and go to state 73
+    statement                      shift and go to state 12
+
+state 71
+
+    (6) statement -> WHILE ( expr ) { statement_list . }
+    }               shift and go to state 74
+
+
+state 72
+
+    (7) statement -> IF ( expr ) { statement_list . } else_clause
+    }               shift and go to state 75
+
+
+state 73
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list . return_stmt }
+    (15) return_stmt -> .
+    (16) return_stmt -> . RETURN expr
+    }               reduce using rule 15 (return_stmt -> .)
+    RETURN          shift and go to state 77
+
+    return_stmt                    shift and go to state 76
+
+state 74
+
+    (6) statement -> WHILE ( expr ) { statement_list } .
+    FUNCTION        reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    WHILE           reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    IF              reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    PRINT           reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    IDENTIFIER      reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    $end            reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    }               reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+    RETURN          reduce using rule 6 (statement -> WHILE ( expr ) { statement_list } .)
+
+
+state 75
+
+    (7) statement -> IF ( expr ) { statement_list } . else_clause
+    (10) else_clause -> .
+    (11) else_clause -> . ELSE { statement_list }
+    FUNCTION        reduce using rule 10 (else_clause -> .)
+    WHILE           reduce using rule 10 (else_clause -> .)
+    IF              reduce using rule 10 (else_clause -> .)
+    PRINT           reduce using rule 10 (else_clause -> .)
+    IDENTIFIER      reduce using rule 10 (else_clause -> .)
+    $end            reduce using rule 10 (else_clause -> .)
+    }               reduce using rule 10 (else_clause -> .)
+    RETURN          reduce using rule 10 (else_clause -> .)
+    ELSE            shift and go to state 79
+
+    else_clause                    shift and go to state 78
+
+state 76
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt . }
+    }               shift and go to state 80
+
+
+state 77
+
+    (16) return_stmt -> RETURN . expr
+    (17) expr -> . ( expr )
+    (18) expr -> . BOOLEAN
+    (19) expr -> . STRING
+    (20) expr -> . FLOAT
+    (21) expr -> . INTEGER
+    (22) expr -> . IDENTIFIER
+    (23) expr -> . FMINUS expr
+    (24) expr -> . MINUS expr
+    (25) expr -> . expr FNEQ expr
+    (26) expr -> . expr FEQ expr
+    (27) expr -> . expr NEQ expr
+    (28) expr -> . expr EQ expr
+    (29) expr -> . expr CONCAT expr
+    (30) expr -> . expr FDIVIDE expr
+    (31) expr -> . expr FTIMES expr
+    (32) expr -> . expr FMINUS expr
+    (33) expr -> . expr FPLUS expr
+    (34) expr -> . expr DIVIDE expr
+    (35) expr -> . expr TIMES expr
+    (36) expr -> . expr MINUS expr
+    (37) expr -> . expr PLUS expr
+    (               shift and go to state 4
+    BOOLEAN         shift and go to state 5
+    STRING          shift and go to state 6
+    FLOAT           shift and go to state 7
+    INTEGER         shift and go to state 8
+    IDENTIFIER      shift and go to state 31
+    FMINUS          shift and go to state 10
+    MINUS           shift and go to state 11
+
+    expr                           shift and go to state 81
+
+state 78
+
+    (7) statement -> IF ( expr ) { statement_list } else_clause .
+    FUNCTION        reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    WHILE           reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    IF              reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    PRINT           reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    IDENTIFIER      reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    $end            reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    }               reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+    RETURN          reduce using rule 7 (statement -> IF ( expr ) { statement_list } else_clause .)
+
+
+state 79
+
+    (11) else_clause -> ELSE . { statement_list }
+    {               shift and go to state 82
+
+
+state 80
+
+    (5) statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .
+    FUNCTION        reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    WHILE           reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    IF              reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    PRINT           reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    IDENTIFIER      reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    $end            reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    }               reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+    RETURN          reduce using rule 5 (statement -> FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt } .)
+
+
+state 81
+
+    (16) return_stmt -> RETURN expr .
+    (25) expr -> expr . FNEQ expr
+    (26) expr -> expr . FEQ expr
+    (27) expr -> expr . NEQ expr
+    (28) expr -> expr . EQ expr
+    (29) expr -> expr . CONCAT expr
+    (30) expr -> expr . FDIVIDE expr
+    (31) expr -> expr . FTIMES expr
+    (32) expr -> expr . FMINUS expr
+    (33) expr -> expr . FPLUS expr
+    (34) expr -> expr . DIVIDE expr
+    (35) expr -> expr . TIMES expr
+    (36) expr -> expr . MINUS expr
+    (37) expr -> expr . PLUS expr
+    }               reduce using rule 16 (return_stmt -> RETURN expr .)
+    FNEQ            shift and go to state 17
+    FEQ             shift and go to state 18
+    NEQ             shift and go to state 19
+    EQ              shift and go to state 20
+    CONCAT          shift and go to state 21
+    FDIVIDE         shift and go to state 22
+    FTIMES          shift and go to state 23
+    FMINUS          shift and go to state 24
+    FPLUS           shift and go to state 25
+    DIVIDE          shift and go to state 26
+    TIMES           shift and go to state 27
+    MINUS           shift and go to state 28
+    PLUS            shift and go to state 29
+
+
+state 82
+
+    (11) else_clause -> ELSE { . statement_list }
+    (3) statement_list -> .
+    (4) statement_list -> . statement statement_list
+    (5) statement -> . FUNCTION IDENTIFIER ( param_list ) { statement_list return_stmt }
+    (6) statement -> . WHILE ( expr ) { statement_list }
+    (7) statement -> . IF ( expr ) { statement_list } else_clause
+    (8) statement -> . PRINT ( expr )
+    (9) statement -> . IDENTIFIER ASSIGN expr
+    }               reduce using rule 3 (statement_list -> .)
+    FUNCTION        shift and go to state 13
+    WHILE           shift and go to state 14
+    IF              shift and go to state 15
+    PRINT           shift and go to state 16
+    IDENTIFIER      shift and go to state 36
+
+    statement_list                 shift and go to state 83
+    statement                      shift and go to state 12
+
+state 83
+
+    (11) else_clause -> ELSE { statement_list . }
+    }               shift and go to state 84
+
+
+state 84
+
+    (11) else_clause -> ELSE { statement_list } .
+    FUNCTION        reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    WHILE           reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    IF              reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    PRINT           reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    IDENTIFIER      reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    $end            reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    }               reduce using rule 11 (else_clause -> ELSE { statement_list } .)
+    RETURN          reduce using rule 11 (else_clause -> ELSE { statement_list } .)
