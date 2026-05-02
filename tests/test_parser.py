@@ -14,7 +14,7 @@ def parse(source: str):
     """
     Parse *source* and return (result, lexer, parser).
     """
-    from src.language_parser import parse_program
+    from language_parser import parse_program
     return parse_program(source)
 
 
