@@ -1,100 +1,92 @@
-﻿from sly import Lexer
+from sly import Lexer
 
 class LanguageLexer(Lexer):
     def __init__(self):
         super().__init__()
         self.is_lexical_error = False
 
-    ### tokens ###
     tokens = {
-        # Keywords
         IF, ELSE, WHILE, PRINT, FUNCTION, RETURN,
-        # Integer
         INTEGER,
         INTEGER_ADDITION, INTEGER_SUBTRACTION, INTEGER_MULTIPLICATION, INTEGER_DIVISION,
         INTEGER_UMINUS, INTEGER_EQUALITY, INTEGER_INEQUALITY,
-        # Float
         FLOAT,
         FLOAT_ADDITION, FLOAT_SUBTRACTION, FLOAT_MULTIPLICATION, FLOAT_DIVISION,
         FLOAT_UMINUS, FLOAT_EQUALITY, FLOAT_INEQUALITY,
-        # Boolean
         BOOLEAN,
-        # String
         STRING, STRING_CONCAT,
-        # Symbols
         PAREN_OPEN, PAREN_CLOSE, BRACE_OPEN, BRACE_CLOSE, COMMA,
-        # Misc
         IDENTIFIER, ASSIGNMENT,
     }
 
     ignore = ' \t'
 
-    # Keywords
-    IF = r'if\b'
-    ELSE = r'else\b'
-    WHILE = r'while\b'
-    PRINT = r'print\b'
-    FUNCTION = r'function\b'
-    RETURN = r'return\b'
-
-    # Float + Arithmetics (longer patterns first)
-    FLOAT = r'\d+\.\d+'
-    FLOAT_UMINUS = r'\-\-\.'
-    FLOAT_EQUALITY = r'==\.'
-    FLOAT_INEQUALITY = r'!=\.'
-    FLOAT_ADDITION = r'\+\.'
-    FLOAT_SUBTRACTION = r'\-\.'
+    # Float arithmetics (longer patterns must come before their prefixes)
+    FLOAT_UMINUS         = r'\-\-\.'
+    FLOAT_EQUALITY       = r'==\.'
+    FLOAT_INEQUALITY     = r'!=\.'
+    FLOAT_ADDITION       = r'\+\.'
+    FLOAT_SUBTRACTION    = r'\-\.'
     FLOAT_MULTIPLICATION = r'\*\.'
-    FLOAT_DIVISION = r'\/\.'
+    FLOAT_DIVISION       = r'\/\.'
 
     # String
     STRING_CONCAT = r'\+\+'
-    STRING = r"'[^']*'"
 
-    # Integer + Arithmetics (longer patterns first)
-    INTEGER = r'\d+'
-    INTEGER_UMINUS = r'\-\-'
-    INTEGER_EQUALITY = r'=='
-    INTEGER_INEQUALITY = r'!='
-    INTEGER_ADDITION = r'\+'
-    INTEGER_SUBTRACTION = r'\-'
+    # Integer arithmetics (longer patterns must come before their prefixes)
+    INTEGER_UMINUS         = r'\-\-'
+    INTEGER_EQUALITY       = r'=='
+    INTEGER_INEQUALITY     = r'!='
+    INTEGER_ADDITION       = r'\+'
+    INTEGER_SUBTRACTION    = r'\-'
     INTEGER_MULTIPLICATION = r'\*'
-    INTEGER_DIVISION = r'\/'
-
-    # Boolean
-    BOOLEAN = r'true\b|false\b'
+    INTEGER_DIVISION       = r'\/'
 
     # Symbols
-    PAREN_OPEN = r'\('
+    PAREN_OPEN  = r'\('
     PAREN_CLOSE = r'\)'
-    BRACE_OPEN = r'\{'
+    BRACE_OPEN  = r'\{'
     BRACE_CLOSE = r'\}'
-    COMMA = r','
+    COMMA       = r','
 
-    # Misc
-    IDENTIFIER = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    # Assignment (must come after equality operators)
     ASSIGNMENT = r'='
 
-    # Extra action for newlines
-    @_(r'\n+')
-    def ignore_newline(self, t):
-        self.lineno += t.value.count('\n')
-
+    # Tokens with value conversion — defined as @_ methods so the conversion
+    # callback is explicit and not relying on SLY metaclass pairing behaviour.
+    @_(r'\d+\.\d+')
     def FLOAT(self, t):
         t.value = float(t.value)
         return t
 
+    @_(r'\d+')
     def INTEGER(self, t):
         t.value = int(t.value)
         return t
 
+    @_(r'true\b|false\b')
     def BOOLEAN(self, t):
         t.value = t.value == 'true'
         return t
 
+    @_(r"'[^']*'")
     def STRING(self, t):
         t.value = t.value[1:-1]
         return t
+
+    # Keywords remapped from IDENTIFIER — order-independent and safe against
+    # any future reordering of class attributes.
+    IDENTIFIER = r'[a-zA-Z_][a-zA-Z0-9_]*'
+    IDENTIFIER['if']       = IF
+    IDENTIFIER['else']     = ELSE
+    IDENTIFIER['while']    = WHILE
+    IDENTIFIER['print']    = PRINT
+    IDENTIFIER['function'] = FUNCTION
+    IDENTIFIER['return']   = RETURN
+
+    @_(r'\n+')
+    def ignore_newline(self, t):
+        self.lineno += t.value.count('\n')
 
     def error(self, t):
         self.is_lexical_error = True
@@ -103,7 +95,6 @@ class LanguageLexer(Lexer):
 
 
 if __name__ == '__main__':
-    # Write a simple test that only run when you execute this file
     string_input: str = '''
         x = 10
         y = 3
