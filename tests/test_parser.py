@@ -3,7 +3,7 @@ pytest test suite for LanguageParser
 Run with: pytest test_parser.py -v
 """
 
-import pytest
+import pytest # noqa
 
 
 # ---------------------------------------------------------------------------
@@ -14,7 +14,7 @@ def parse(source: str):
     """
     Parse *source* and return (result, lexer, parser).
     """
-    from language_parser import parse_program
+    from src.language_parser import parse_program
     return parse_program(source)
 
 
