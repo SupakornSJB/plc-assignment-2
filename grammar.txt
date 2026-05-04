@@ -52,6 +52,14 @@ Expression → Expression "==" Expression
            | STRING
            | BOOLEAN
 
+// Note: The four comparison rules below also appear in Expression.
+// Ideally, BooleanExpression would be a proper subset of Expression
+// (Expression → BooleanExpression), but adding that rule creates
+// a circular dependency (Expression → BooleanExpression → Expression) that causes hundreds
+// of shift/reduce and reduce/reduce conflicts in an LALR(1) parser.
+// The duplication is intentional: BooleanExpression constrains if/while
+// conditions at the grammar level, while Expression allows comparisons
+// in all other contexts. Type correctness is enforced in semantic analysis.
 BooleanExpression → Expression "==" Expression
                   | Expression "!=" Expression
                   | Expression "==." Expression
