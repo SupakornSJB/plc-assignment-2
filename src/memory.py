@@ -23,22 +23,23 @@ class Memory:
         assert len(self.scopes) > 1, "Cannot pop global scope"
         self.scopes.pop()
 
-    def get(self, variable_name: str) -> object:
+    def get(self, variable_name: str) -> dict:
         for scope in reversed(self.scopes):
             if variable_name in scope:
                 return scope[variable_name]
         raise NameError(f"Variable '{variable_name}' is not defined")
 
     def set(self, variable_name: str, value: object, data_type: str) -> None:
-        # No shadowing: assignment updates the variable in whichever scope already
-        # owns it, so inner scopes cannot hide outer ones. If the variable is new,
-        # it is created in the current (innermost) scope.
         for scope in reversed(self.scopes):
             if variable_name in scope:
+                current_data_type = scope[variable_name]["data_type"]
+                if current_data_type != data_type:
+                    raise TypeError(f"Variable '{variable_name}' was initially of type '{current_data_type}', but it is being assigned '{data_type}'")
                 scope[variable_name] = {"value": value, "data_type": data_type}
                 return
         self._current[variable_name] = {"value": value, "data_type": data_type}
 
+    # Used for printing the memory table, useful for debugging
     def __repr__(self) -> str:
         string = "Name\tValue\tData Type\n"
         string += "-" * 30 + "\n"
