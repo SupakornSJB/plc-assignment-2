@@ -1,36 +1,44 @@
-﻿# PLC Assignment 2
+# PLC Assignment 2
 
-This project is a small compiler/interpreter assignment built around custom grammar and SLY:
+A small compiler/interpreter for a custom language, built with Python and [SLY](https://github.com/dabeaz/sly).
 
-## Project Overview
+## Pipeline
 
-The language supported by this project includes:
+```
+Source Code → [Lexer] → Tokens → [Parser] → AST → [Interpreter] → Output / Memory
+```
 
-- variable assignments
+| Stage | File | Description |
+|---|---|---|
+| Lexer | `src/lexer.py` | Tokenises source into typed tokens |
+| Parser | `src/parser.py` | Builds an AST from tokens |
+| AST Nodes | `src/ast/expression.py`, `src/ast/statement.py` | Data classes for the tree |
+| Memory | `src/memory.py` | Scoped symbol table (singleton) |
+| Interpreter | `src/interpreter.py` | Tree-walk interpreter; produces output and final memory state |
+
+## Language Features
+
+- Variable assignments
 - `if` / `else` statements
 - `while` loops
 - `print` statements
-- function declarations with parameters and optional return values
-- integer, float, string, and boolean expressions
+- Function declarations with parameters and optional return values
+- Integer, float, string, and boolean expressions
+- Type enforcement — operands are checked at runtime (e.g. `+` requires both sides to be `int`)
 
-## Grammar
+### Operators
 
-The language grammar is defined in [`grammar.txt`](./grammar.txt).
+| Category | Operators |
+|---|---|
+| Integer arithmetic | `+` `-` `*` `/` |
+| Float arithmetic | `+.` `-.` `*.` `/.` |
+| Integer negation | `--` |
+| Float negation | `--.` |
+| String concat | `++` |
+| Integer comparison | `==` `!=` |
+| Float comparison | `==.` `!=.` |
 
-Some supported constructs include:
-
-- `AssignmentStatement`
-- `IfStatement`
-- `WhileStatement`
-- `PrintStatement`
-- `FunctionDeclaration`
-- arithmetic expressions for integers and floats
-- string concatenation using `++`
-- boolean comparisons such as:
-    - `==`
-    - `!=`
-    - `==.`
-    - `!=.`
+The full grammar is in [`grammar.txt`](./grammar.txt).
 
 ## Setup
 
@@ -48,7 +56,19 @@ uv sync
 
 ## Running
 
-Run the lexer directly:
+Run the parser (prints the AST):
+
+```bash
+uv run src/parser.py
+```
+
+Run the interpreter (prints output and final memory state):
+
+```bash
+uv run src/interpreter.py
+```
+
+Run the lexer:
 
 ```bash
 uv run src/lexer.py
@@ -56,11 +76,15 @@ uv run src/lexer.py
 
 ## Testing
 
-Install dev dependencies and run tests:
-
 ```bash
 uv sync --group dev
-uv run pytest tests/ -v
+uv run pytest -v
+```
+
+Run a specific test file:
+
+```bash
+uv run pytest tests/test_interpreter.py -v
 ```
 
 Run a specific test:
@@ -68,3 +92,21 @@ Run a specific test:
 ```bash
 uv run pytest tests/test_lexer.py::test_integer_literal -v
 ```
+
+### Test coverage
+
+| File | What it tests |
+|---|---|
+| `tests/test_lexer.py` | Token recognition, keyword mapping, error flag |
+| `tests/test_ast.py` | AST node construction |
+| `tests/test_memory.py` | Scoped symbol table, singleton, type enforcement on reassignment |
+| `tests/test_parser.py` | AST structure produced by the parser |
+| `tests/test_interpreter.py` | End-to-end execution, type mismatch errors, Fibonacci |
+
+## Knowledge Sharing
+
+| Doc | Topic |
+|---|---|
+| [`knowledge_sharing/interpreter.md`](./knowledge_sharing/interpreter.md) | How the interpreter works, visitor dispatch, memory scoping, type checking |
+| [`knowledge_sharing/visitor_pattern.md`](./knowledge_sharing/visitor_pattern.md) | Visitor pattern — AST nodes, parser, and translator |
+| [`knowledge_sharing/uminus.md`](./knowledge_sharing/uminus.md) | Unary negation operators (`--` and `--.`) |

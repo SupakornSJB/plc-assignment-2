@@ -30,11 +30,11 @@ def test_reassignment():
     assert m.get("x")["value"] == 99
 
 
-def test_reassignment_different_type():
+def test_reassignment_different_type_raises():
     m = Memory()
     m.set("x", 1, "int")
-    m.set("x", "hello", "string")
-    assert m.get("x") == {"value": "hello", "data_type": "string"}
+    with pytest.raises(TypeError):
+        m.set("x", "hello", "string")
 
 
 def test_multiple_variables():
