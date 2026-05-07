@@ -21,3 +21,6 @@ jobs:
 
       - name: Run tests
         run: uv run pytest tests/ -v
+
+      - name: Run grammar tests
+        run: uv run pytest src/grammar_testing/test_grammar.py -v

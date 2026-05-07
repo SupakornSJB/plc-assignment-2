@@ -1,0 +1,81 @@
+﻿Program → StatementList
+
+
+StatementList → Statement StatementList
+              | ε
+
+
+Statement → AssignmentStatement
+          | IfStatement
+          | WhileStatement
+          | PrintStatement
+          | FunctionDeclaration
+
+
+AssignmentStatement → IDENTIFIER "=" Expression
+
+
+IfStatement → "if" "(" Expression ")" "{" StatementList "}" ElseClause
+
+
+ElseClause → "else" "{" StatementList "}"
+           | ε
+
+
+WhileStatement → "while" "(" Expression ")" "{" StatementList "}"
+
+
+PrintStatement → "print" "(" Expression ")"
+
+
+FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")"
+                      "{" StatementList ReturnStatement "}"
+
+
+ParameterList → IDENTIFIER "," ParameterList
+              | IDENTIFIER
+              | ε
+
+
+ReturnStatement → "return" Expression
+                | ε
+
+
+// [parser rule] ambiguous; resolved via SLY precedence declarations on tokens, not grammar rules
+Expression → Expression EqualityOperation Expression
+           | Expression AdditionOperation Expression
+           | Expression MultiplicationOperation Expression
+           | UnaryOperation Expression
+           | "(" Expression ")"
+           | IDENTIFIER
+           | INTEGER
+           | FLOAT
+           | STRING
+           | BOOLEAN
+
+// [readability only] not a parser non-terminal; each operator is a separate token in the lexer
+// mapped directly as: expr EQ expr, expr NEQ expr, etc.
+EqualityOperation → "=="
+                  | "!="
+                  | "==."
+                  | "!=."
+
+// [readability only] not a parser non-terminal; each operator is a separate token in the lexer
+// mapped directly as: expr PLUS expr, expr MINUS expr, etc.
+AdditionOperation → "+"
+                  | "-"
+                  | "+."
+                  | "-."
+                  | "++"
+
+// [readability only] not a parser non-terminal; each operator is a separate token in the lexer
+// mapped directly as: expr TIMES expr, expr DIVIDE expr, etc.
+MultiplicationOperation → "*"
+                        | "/"
+                        | "*."
+                        | "/."
+
+// [readability only] not a parser non-terminal; implemented as MINUS expr %prec UMINUS
+// and FMINUS expr %prec UMINUS in the parser
+UnaryOperation → "-"
+               | "-."
