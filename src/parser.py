@@ -1,16 +1,22 @@
 from sly import Parser  # noqa
 from lexer import LanguageLexer
 
+from src.ast_node.expression import (
+    BinaryOp, UnaryOp, FunctionCall, Identifier,
+    IntegerLiteral, FloatLiteral, StringLiteral, BooleanLiteral,
+)
+from src.ast_node.statement import (
+    Program, AssignmentStatement, IfStatement, WhileStatement,
+    PrintStatement, FunctionDeclaration,
+)
+
 
 # ==================== Parser ====================
 
 class LanguageParser(Parser):  # noqa
-    # Use the lexer's token set directly — no splitting of IDENTIFIER needed.
-    # Type checking is deferred entirely to semantic analysis.
     tokens = LanguageLexer.tokens
 
     # Precedence table — lowest to highest.
-    # Comparison operators sit at the bottom so that arithmetic binds tighter.
     precedence = (
         ('left', 'INTEGER_EQUALITY', 'INTEGER_INEQUALITY'),     # noqa  ==  !=
         ('left', 'FLOAT_EQUALITY', 'FLOAT_INEQUALITY'),         # noqa  ==. !=.
@@ -30,7 +36,7 @@ class LanguageParser(Parser):  # noqa
 
     @_('statement_list')  # noqa
     def program(self, p):
-        return ('program', p.statement_list)  # noqa
+        return Program(p.statement_list)
 
     # ==================== StatementList ====================
 
@@ -69,21 +75,21 @@ class LanguageParser(Parser):  # noqa
 
     @_('IDENTIFIER ASSIGNMENT expression')  # noqa
     def assignment_statement(self, p):
-        return ('assign', p.IDENTIFIER, p.expression)  # noqa
+        return AssignmentStatement(p.IDENTIFIER, p.expression)
 
     # ==================== IfStatement ====================
     # IfStatement → "if" "(" BooleanExpression ")" "{" StatementList "}" ElseClause
 
     @_('IF PAREN_OPEN boolean_expression PAREN_CLOSE BRACE_OPEN statement_list BRACE_CLOSE else_clause')  # noqa
     def if_statement(self, p):
-        return ('if', p.boolean_expression, p.statement_list, p.else_clause)  # noqa
+        return IfStatement(p.boolean_expression, p.statement_list, p.else_clause)
 
     # ==================== ElseClause ====================
     # ElseClause → "else" "{" StatementList "}" | ε
 
     @_('ELSE BRACE_OPEN statement_list BRACE_CLOSE')  # noqa
     def else_clause(self, p):
-        return ('else', p.statement_list)  # noqa
+        return p.statement_list  # list[Statement] — IfStatement stores directly
 
     @_('')  # noqa
     def else_clause(self, p):
@@ -94,21 +100,21 @@ class LanguageParser(Parser):  # noqa
 
     @_('WHILE PAREN_OPEN boolean_expression PAREN_CLOSE BRACE_OPEN statement_list BRACE_CLOSE')  # noqa
     def while_statement(self, p):
-        return ('while', p.boolean_expression, p.statement_list)  # noqa
+        return WhileStatement(p.boolean_expression, p.statement_list)
 
     # ==================== PrintStatement ====================
     # PrintStatement → "print" "(" Expression ")"
 
     @_('PRINT PAREN_OPEN expression PAREN_CLOSE')  # noqa
     def print_statement(self, p):
-        return ('print', p.expression)  # noqa
+        return PrintStatement(p.expression)
 
     # ==================== FunctionDeclaration ====================
     # FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")" "{" StatementList ReturnStatement "}"
 
     @_('FUNCTION IDENTIFIER PAREN_OPEN parameter_list PAREN_CLOSE BRACE_OPEN statement_list return_statement BRACE_CLOSE')  # noqa
     def function_declaration(self, p):
-        return ('function', p.IDENTIFIER, p.parameter_list, p.statement_list, p.return_statement)  # noqa
+        return FunctionDeclaration(p.IDENTIFIER, p.parameter_list, p.statement_list, p.return_statement)
 
     # ==================== ParameterList ====================
     # ParameterList → IDENTIFIER "," ParameterList | IDENTIFIER | ε
@@ -127,10 +133,11 @@ class LanguageParser(Parser):  # noqa
 
     # ==================== ReturnStatement ====================
     # ReturnStatement → "return" Expression | ε
+    # Returns Expression directly (or None) — FunctionDeclaration stores as return_expr.
 
     @_('RETURN expression')  # noqa
     def return_statement(self, p):
-        return ('return', p.expression)  # noqa
+        return p.expression  # Expression node, not a tuple
 
     @_('')  # noqa
     def return_statement(self, p):
@@ -152,97 +159,96 @@ class LanguageParser(Parser):  # noqa
 
     @_('expression INTEGER_EQUALITY expression')  # noqa
     def boolean_expression(self, p):
-        return ('int_eq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('==', p.expression0, p.expression1)
 
     @_('expression INTEGER_INEQUALITY expression')  # noqa
     def boolean_expression(self, p):
-        return ('int_neq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('!=', p.expression0, p.expression1)
 
     @_('expression FLOAT_EQUALITY expression')  # noqa
     def boolean_expression(self, p):
-        return ('float_eq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('==.', p.expression0, p.expression1)
 
     @_('expression FLOAT_INEQUALITY expression')  # noqa
     def boolean_expression(self, p):
-        return ('float_neq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('!=.', p.expression0, p.expression1)
 
     @_('IDENTIFIER')  # noqa
     def boolean_expression(self, p):
-        return ('identifier', p.IDENTIFIER)  # noqa
+        return Identifier(p.IDENTIFIER)
 
     @_('BOOLEAN')  # noqa
     def boolean_expression(self, p):
-        return ('boolean', p.BOOLEAN)  # noqa
+        return BooleanLiteral(p.BOOLEAN)
 
     # ==================== Expression ====================
     # Unified expression — no int/float/string split.
-    # All operator rules mirror the grammar exactly.
     # Type correctness is enforced in semantic analysis.
 
-    # --- Comparison (also appear in BooleanExpression for if/while conditions) ---
+    # --- Comparison ---
     @_('expression INTEGER_EQUALITY expression')  # noqa
     def expression(self, p):
-        return ('int_eq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('==', p.expression0, p.expression1)
 
     @_('expression INTEGER_INEQUALITY expression')  # noqa
     def expression(self, p):
-        return ('int_neq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('!=', p.expression0, p.expression1)
 
     @_('expression FLOAT_EQUALITY expression')  # noqa
     def expression(self, p):
-        return ('float_eq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('==.', p.expression0, p.expression1)
 
     @_('expression FLOAT_INEQUALITY expression')  # noqa
     def expression(self, p):
-        return ('float_neq', p.expression0, p.expression1)  # noqa
+        return BinaryOp('!=.', p.expression0, p.expression1)
 
     # --- Integer arithmetic ---
     @_('expression INTEGER_ADDITION expression')  # noqa
     def expression(self, p):
-        return ('int_add', p.expression0, p.expression1)  # noqa
+        return BinaryOp('+', p.expression0, p.expression1)
 
     @_('expression INTEGER_SUBTRACTION expression')  # noqa
     def expression(self, p):
-        return ('int_sub', p.expression0, p.expression1)  # noqa
+        return BinaryOp('-', p.expression0, p.expression1)
 
     @_('expression INTEGER_MULTIPLICATION expression')  # noqa
     def expression(self, p):
-        return ('int_mul', p.expression0, p.expression1)  # noqa
+        return BinaryOp('*', p.expression0, p.expression1)
 
     @_('expression INTEGER_DIVISION expression')  # noqa
     def expression(self, p):
-        return ('int_div', p.expression0, p.expression1)  # noqa
+        return BinaryOp('/', p.expression0, p.expression1)
 
     # --- Float arithmetic ---
     @_('expression FLOAT_ADDITION expression')  # noqa
     def expression(self, p):
-        return ('float_add', p.expression0, p.expression1)  # noqa
+        return BinaryOp('+.', p.expression0, p.expression1)
 
     @_('expression FLOAT_SUBTRACTION expression')  # noqa
     def expression(self, p):
-        return ('float_sub', p.expression0, p.expression1)  # noqa
+        return BinaryOp('-.', p.expression0, p.expression1)
 
     @_('expression FLOAT_MULTIPLICATION expression')  # noqa
     def expression(self, p):
-        return ('float_mul', p.expression0, p.expression1)  # noqa
+        return BinaryOp('*.', p.expression0, p.expression1)
 
     @_('expression FLOAT_DIVISION expression')  # noqa
     def expression(self, p):
-        return ('float_div', p.expression0, p.expression1)  # noqa
+        return BinaryOp('/.', p.expression0, p.expression1)
 
     # --- String concatenation ---
     @_('expression STRING_CONCAT expression')  # noqa
     def expression(self, p):
-        return ('string_concat', p.expression0, p.expression1)  # noqa
+        return BinaryOp('++', p.expression0, p.expression1)
 
     # --- Unary minus ---
     @_('INTEGER_UMINUS expression')  # noqa
     def expression(self, p):
-        return ('int_uminus', p.expression)  # noqa
+        return UnaryOp('--', p.expression)
 
     @_('FLOAT_UMINUS expression')  # noqa
     def expression(self, p):
-        return ('float_uminus', p.expression)  # noqa
+        return UnaryOp('--.', p.expression)
 
     # --- Parenthesised expression ---
     @_('PAREN_OPEN expression PAREN_CLOSE')  # noqa
@@ -257,31 +263,31 @@ class LanguageParser(Parser):  # noqa
     # --- Identifier ---
     @_('IDENTIFIER')  # noqa
     def expression(self, p):
-        return ('identifier', p.IDENTIFIER)  # noqa
+        return Identifier(p.IDENTIFIER)
 
     # --- Literals ---
     @_('INTEGER')  # noqa
     def expression(self, p):
-        return ('integer', p.INTEGER)  # noqa
+        return IntegerLiteral(p.INTEGER)
 
     @_('FLOAT')  # noqa
     def expression(self, p):
-        return ('float', p.FLOAT)  # noqa
+        return FloatLiteral(p.FLOAT)
 
     @_('STRING')  # noqa
     def expression(self, p):
-        return ('string', p.STRING)  # noqa
+        return StringLiteral(p.STRING)
 
     @_('BOOLEAN')  # noqa
     def expression(self, p):
-        return ('boolean', p.BOOLEAN)  # noqa
+        return BooleanLiteral(p.BOOLEAN)
 
     # ==================== FunctionCall ====================
     # FunctionCall → IDENTIFIER "(" ArgumentList ")"
 
     @_('IDENTIFIER PAREN_OPEN argument_list PAREN_CLOSE')  # noqa
     def function_call(self, p):
-        return ('call', p.IDENTIFIER, p.argument_list)  # noqa
+        return FunctionCall(p.IDENTIFIER, p.argument_list)
 
     # ==================== ArgumentList ====================
     # ArgumentList → Expression "," ArgumentList | Expression | ε
@@ -313,12 +319,12 @@ class LanguageParser(Parser):  # noqa
 def parse_program(source: str):
     """
     Tokenize *source* and parse it.
-    Returns (result, lexer, parser).
+    Returns (result, lexer, parser) where result is a Program AST node.
     """
-    lexer = LanguageLexer()   # noqa
-    parser = LanguageParser() # noqa
+    lexer = LanguageLexer()    # noqa
+    parser = LanguageParser()  # noqa
     tokens = lexer.tokenize(source)
-    result = parser.parse(tokens)  # noqa
+    result = parser.parse(tokens)
     return result, lexer, parser
 
 
@@ -377,19 +383,8 @@ if __name__ == '__main__':
         print("=" * 50)
         print("PARSING SUCCESSFUL!")
         print("=" * 50)
-        print("\nAbstract Syntax Tree (AST):")
-
-        import json
-
-        def ast_to_dict(node):
-            if isinstance(node, tuple):
-                return {node[0]: [ast_to_dict(child) for child in node[1:]]}
-            elif isinstance(node, list):
-                return [ast_to_dict(item) for item in node]
-            else:
-                return node
-
-        print(json.dumps(ast_to_dict(result), indent=2))
+        print("\nAST:")
+        print(repr(result))
     else:
         print("=" * 50)
         print("PARSING FAILED!")
