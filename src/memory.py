@@ -50,7 +50,9 @@ class Memory:
                 string += f"{var}\t{data['value']}\t{data['data_type']}\n"
         string += "-" * 30 + "\n"
         return string
-
+    
+    def reset(self) -> None:
+        self.scopes = [{}]
 
 if __name__ == "__main__":
     memory = Memory()
