@@ -70,6 +70,10 @@ class LanguageParser(Parser):  # noqa
     def statement(self, p):
         return p.function_declaration
 
+    @_('function_call')  # noqa
+    def statement(self, p):
+        return p.function_call
+
     # ==================== AssignmentStatement ====================
     # AssignmentStatement → IDENTIFIER "=" Expression
 

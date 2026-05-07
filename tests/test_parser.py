@@ -452,6 +452,22 @@ class TestFunctionCall:
         assert isinstance(args[0], Identifier) and args[0].name == 'x'
         assert isinstance(args[1], Identifier) and args[1].name == 'y'
 
+    def test_call_as_standalone_statement(self):
+        # function call used as a statement (return value discarded)
+        ast = parse_ok("function greet() { return 'hi' }\ngreet()")
+        stmt = ast.statements[1]
+        assert isinstance(stmt, FunctionCall)
+        assert stmt.name == 'greet'
+        assert stmt.args == []
+
+    def test_call_with_args_as_standalone_statement(self):
+        ast = parse_ok("function set(x) { x = 1 }\nset(42)")
+        stmt = ast.statements[1]
+        assert isinstance(stmt, FunctionCall)
+        assert stmt.name == 'set'
+        assert len(stmt.args) == 1
+        assert isinstance(stmt.args[0], IntegerLiteral) and stmt.args[0].value == 42
+
 
 # ---------------------------------------------------------------------------
 # 11. Program-level (multiple statements)
