@@ -29,44 +29,46 @@ ParameterList → IDENTIFIER
 ReturnStatement → "return" Expression
                 | ε
 
-BooleanExpression → IntExpression "==" IntExpression
-                  | IntExpression "!=" IntExpression
-                  | FloatExpression "==." FloatExpression
-                  | FloatExpression "!=." FloatExpression
+Expression → Expression "==" Expression
+           | Expression "!=" Expression
+           | Expression "==." Expression
+           | Expression "!=." Expression
+           | Expression "+" Expression
+           | Expression "-" Expression
+           | Expression "+." Expression
+           | Expression "-." Expression
+           | Expression "++" Expression
+           | Expression "*" Expression
+           | Expression "/" Expression
+           | Expression "*." Expression
+           | Expression "/." Expression
+           | "--" Expression
+           | "--." Expression
+           | "(" Expression ")"
+           | FunctionCall
+           | IDENTIFIER
+           | INTEGER
+           | FLOAT
+           | STRING
+           | BOOLEAN
+
+// Note: The four comparison rules below also appear in Expression.
+// Ideally, BooleanExpression would be a proper subset of Expression
+// (Expression → BooleanExpression), but adding that rule creates
+// a circular dependency (Expression → BooleanExpression → Expression) that causes hundreds
+// of shift/reduce and reduce/reduce conflicts in an LALR(1) parser.
+// The duplication is intentional: BooleanExpression constrains if/while
+// conditions at the grammar level, while Expression allows comparisons
+// in all other contexts. Type correctness is enforced in semantic analysis.
+BooleanExpression → Expression "==" Expression
+                  | Expression "!=" Expression
+                  | Expression "==." Expression
+                  | Expression "!=." Expression
+                  | IDENTIFIER
                   | BOOLEAN
 
-Expression → IntExpression
-           | FloatExpression
-           | StringExpression
-           | BooleanExpression
-           | IDENTIFIER
-           | "(" Expression ")"
+FunctionCall → IDENTIFIER "(" ArgumentList ")"
 
-IntExpression → IntExpression "+" IntTerm
-              | IntExpression "-" IntTerm
-              | IntTerm
-
-IntTerm → IntTerm "*" IntFactor
-        | IntTerm "/" IntFactor
-        | IntFactor
-
-IntFactor → INTEGER
-          | IDENTIFIER
-          | "(" IntExpression ")"
-          | "--" IntFactor
-
-FloatExpression → FloatExpression "+." FloatTerm
-                | FloatExpression "-." FloatTerm
-                | FloatTerm
-
-FloatTerm → FloatTerm "*." FloatFactor
-          | FloatTerm "/." FloatFactor
-          | FloatFactor
-          | "--." FloatTerm
-
-FloatFactor → FLOAT
-            | IDENTIFIER
-            | "(" FloatExpression ")"
-
-StringExpression → STRING
-                 | StringExpression "++" StringExpression
+ArgumentList → Expression "," ArgumentList
+             | Expression
+             | ε
