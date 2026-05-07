@@ -1,8 +1,8 @@
-from src.ast.expression import (
+from src.ast_node.expression import (
     BinaryOp, UnaryOp, FunctionCall, Identifier,
     IntegerLiteral, FloatLiteral, StringLiteral, BooleanLiteral,
 )
-from src.ast.statement import (
+from src.ast_node.statement import (
     Program, AssignmentStatement, IfStatement, WhileStatement,
     PrintStatement, FunctionDeclaration,
 )

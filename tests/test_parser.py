@@ -14,7 +14,7 @@ def parse(source: str):
     """
     Parse *source* and return (result, lexer, parser).
     """
-    from parser import parse_program
+    from src.parser import parse_program
     return parse_program(source)
 
 
@@ -559,6 +559,6 @@ class TestSyntaxErrors:
 class TestParserInit:
 
     def test_is_syntax_error_starts_false(self):
-        from parser import LanguageParser
+        from src.parser import LanguageParser
         p = LanguageParser()
         assert p.is_syntax_error is False
