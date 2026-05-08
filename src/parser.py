@@ -1,5 +1,5 @@
 from sly import Parser  # noqa
-from lexer import LanguageLexer
+from src.lexer import LanguageLexer
 
 from src.ast_node.expression import (
     BinaryOp, UnaryOp, FunctionCall, Identifier,
