@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.ast.expression import ASTNode, Expression
+from src.ast_node.expression import ASTNode, Expression
 
 
 class Statement(ASTNode, ABC):

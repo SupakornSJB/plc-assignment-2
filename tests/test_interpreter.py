@@ -1,4 +1,4 @@
-import pytest
+import pytest # noqa
 from src.lexer import LanguageLexer
 from src.parser import LanguageParser
 from src.interpreter import Interpreter

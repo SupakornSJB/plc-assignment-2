@@ -1,4 +1,4 @@
-from src.ast.statement import (
+from src.ast_node.statement import (
     Program,
     AssignmentStatement,
     IfStatement,
@@ -6,7 +6,7 @@ from src.ast.statement import (
     PrintStatement,
     FunctionDeclaration,
 )
-from src.ast.expression import (
+from src.ast_node.expression import (
     BinaryOp,
     UnaryOp,
     FunctionCall,

@@ -1,8 +1,8 @@
-from src.ast.expression import (
+from src.ast_node.expression import (
     BinaryOp, UnaryOp, FunctionCall, Identifier,
     IntegerLiteral, FloatLiteral, StringLiteral, BooleanLiteral,
 )
-from src.ast.statement import (
+from src.ast_node.statement import (
     Program, AssignmentStatement, IfStatement, WhileStatement,
     PrintStatement, FunctionDeclaration,
 )
@@ -81,16 +81,30 @@ class Interpreter:
         func = entry['value']
         if not isinstance(func, FunctionDeclaration):
             raise TypeError(f"'{node.name}' is not a function")
+
+        # Evaluate arguments in the CURRENT (caller) scope before pushing
         args = [self.visit(a) for a in node.args]
+
         if len(args) != len(func.params):
             raise TypeError(
                 f"'{node.name}' expects {len(func.params)} argument(s), got {len(args)}"
             )
+
+        # Push a FRESH scope that only contains the parameters.
+        # This ensures params shadow any outer variable with the same name,
+        # and assignments inside the function body do not leak to outer scopes.
         self.memory.push_scope()
         for param, val in zip(func.params, args):
-            self.memory._current[param] = {"value": val, "data_type": self._type_of(val)}
+            # Inject directly into the new scope — bypasses set()'s scope-walk
+            # so params are always local regardless of outer variables.
+            self.memory._current[param] = {
+                "value": val,
+                "data_type": self._type_of(val),
+            }
+
         for statement in func.body:
             self.visit(statement)
+
         result = self.visit(func.return_expr) if func.return_expr is not None else None
         self.memory.pop_scope()
         return result
@@ -99,7 +113,6 @@ class Interpreter:
         left = self.visit(node.left)
         right = self.visit(node.right)
 
-        # Type checking
         if node.op in self.int_operators:
             self._require_int(left, 'binary_op')
             self._require_int(right, 'binary_op')
@@ -161,15 +174,15 @@ class Interpreter:
     def visit_boolean_literal(node: BooleanLiteral):
         return node.value
 
-    ##### Helpers #####
+    # ── Helpers ───────────────────────────────────────────────────────────────
 
     @staticmethod
     def _type_of(value) -> str:
         # bool must be checked before int because bool is a subclass of int
-        if isinstance(value, bool):   return 'bool'
-        if isinstance(value, int):    return 'int'
-        if isinstance(value, float):  return 'float'
-        if isinstance(value, str):    return 'string'
+        if isinstance(value, bool):  return 'bool'
+        if isinstance(value, int):   return 'int'
+        if isinstance(value, float): return 'float'
+        if isinstance(value, str):   return 'string'
         return 'unknown'
 
     @staticmethod
@@ -183,21 +196,21 @@ class Interpreter:
     def _require_int(value, context: str):
         if isinstance(value, bool) or not isinstance(value, int):
             raise TypeError(
-                f"{context} condition must evaluate to int, got {type(value).__name__}"
+                f"{context} requires int, got {type(value).__name__}"
             )
 
     @staticmethod
     def _require_float(value, context: str):
         if not isinstance(value, float):
             raise TypeError(
-                f"{context} condition must evaluate to float, got {type(value).__name__}"
+                f"{context} requires float, got {type(value).__name__}"
             )
 
     @staticmethod
     def _require_string(value, context: str):
         if not isinstance(value, str):
             raise TypeError(
-                f"{context} condition must evaluate to string, got {type(value).__name__}"
+                f"{context} requires string, got {type(value).__name__}"
             )
 
 
