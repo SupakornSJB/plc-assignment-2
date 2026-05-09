@@ -159,6 +159,8 @@ uv add PySide6
 
 # Run the IDE
 python main.py
+# or
+uv run main.py
 
 # Run all tests
 uv run pytest
