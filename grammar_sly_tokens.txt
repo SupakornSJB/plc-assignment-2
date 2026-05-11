@@ -1,0 +1,110 @@
+Program → StatementList
+
+StatementList → Statement StatementList
+              | ε
+
+Statement → AssignmentStatement
+          | IfStatement
+          | WhileStatement
+          | PrintStatement
+          | FunctionDeclaration
+
+AssignmentStatement → IDENTIFIER ASSIGNMENT Expression
+
+IfStatement → IF PAREN_OPEN BooleanExpression PAREN_CLOSE BRACE_OPEN StatementList BRACE_CLOSE ElseClause
+
+ElseClause → ELSE BRACE_OPEN StatementList BRACE_CLOSE
+           | ε
+
+WhileStatement → WHILE PAREN_OPEN BooleanExpression PAREN_CLOSE BRACE_OPEN StatementList BRACE_CLOSE
+
+PrintStatement → PRINT PAREN_OPEN Expression PAREN_CLOSE
+
+FunctionDeclaration → FUNCTION IDENTIFIER PAREN_OPEN ParameterList PAREN_CLOSE BRACE_OPEN StatementList ReturnStatement BRACE_CLOSE
+
+ParameterList → IDENTIFIER
+              | IDENTIFIER COMMA ParameterList
+              | ε
+
+ReturnStatement → RETURN Expression
+                | ε
+
+Expression → Expression INTEGER_EQUALITY Expression
+           | Expression INTEGER_INEQUALITY Expression
+           | Expression FLOAT_EQUALITY Expression
+           | Expression FLOAT_INEQUALITY Expression
+           | Expression INTEGER_ADDITION Expression
+           | Expression INTEGER_SUBTRACTION Expression
+           | Expression FLOAT_ADDITION Expression
+           | Expression FLOAT_SUBTRACTION Expression
+           | Expression STRING_CONCAT Expression
+           | Expression INTEGER_MULTIPLICATION Expression
+           | Expression INTEGER_DIVISION Expression
+           | Expression FLOAT_MULTIPLICATION Expression
+           | Expression FLOAT_DIVISION Expression
+           | INTEGER_UMINUS Expression
+           | FLOAT_UMINUS Expression
+           | PAREN_OPEN Expression PAREN_CLOSE
+           | FunctionCall
+           | IDENTIFIER
+           | INTEGER
+           | FLOAT
+           | STRING
+           | BOOLEAN
+
+BooleanExpression → Expression INTEGER_EQUALITY Expression
+                  | Expression INTEGER_INEQUALITY Expression
+                  | Expression FLOAT_EQUALITY Expression
+                  | Expression FLOAT_INEQUALITY Expression
+                  | IDENTIFIER
+                  | BOOLEAN
+
+FunctionCall → IDENTIFIER PAREN_OPEN ArgumentList PAREN_CLOSE
+
+ArgumentList → Expression COMMA ArgumentList
+             | Expression
+             | ε
+
+// Keywords
+IF       → "if"
+ELSE     → "else"
+WHILE    → "while"
+PRINT    → "print"
+FUNCTION → "function"
+RETURN   → "return"
+
+// Symbols
+ASSIGNMENT  → "="
+PAREN_OPEN  → "("
+PAREN_CLOSE → ")"
+BRACE_OPEN  → "{"
+BRACE_CLOSE → "}"
+COMMA       → ","
+
+// Integer operators
+INTEGER_ADDITION       → "+"
+INTEGER_SUBTRACTION    → "-"
+INTEGER_MULTIPLICATION → "*"
+INTEGER_DIVISION       → "/"
+INTEGER_UMINUS         → "--"
+INTEGER_EQUALITY       → "=="
+INTEGER_INEQUALITY     → "!="
+
+// Float operators
+FLOAT_ADDITION         → "+."
+FLOAT_SUBTRACTION      → "-."
+FLOAT_MULTIPLICATION   → "*."
+FLOAT_DIVISION         → "/."
+FLOAT_UMINUS           → "--."
+FLOAT_EQUALITY         → "==."
+FLOAT_INEQUALITY       → "!=."
+
+// String operator
+STRING_CONCAT → "++"
+
+// Literals
+INTEGER    → [0-9]+
+FLOAT      → [0-9]+ "." [0-9]+
+STRING     → "'" [^']* "'"
+BOOLEAN    → "true" | "false"
+IDENTIFIER → [a-zA-Z_][a-zA-Z0-9_]*
