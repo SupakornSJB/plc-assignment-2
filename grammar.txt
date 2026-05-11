@@ -9,42 +9,42 @@ Statement → AssignmentStatement
           | PrintStatement
           | FunctionDeclaration
 
-AssignmentStatement → IDENTIFIER "=" Expression
+AssignmentStatement → IDENTIFIER ASSIGNMENT Expression
 
-IfStatement → "if" "(" BooleanExpression ")" "{" StatementList "}" ElseClause
+IfStatement → IF PAREN_OPEN BooleanExpression PAREN_CLOSE BRACE_OPEN StatementList BRACE_CLOSE ElseClause
 
-ElseClause → "else" "{" StatementList "}"
+ElseClause → ELSE BRACE_OPEN StatementList BRACE_CLOSE
            | ε
 
-WhileStatement → "while" "(" BooleanExpression ")" "{" StatementList "}"
+WhileStatement → WHILE PAREN_OPEN BooleanExpression PAREN_CLOSE BRACE_OPEN StatementList BRACE_CLOSE
 
-PrintStatement → "print" "(" Expression ")"
+PrintStatement → PRINT PAREN_OPEN Expression PAREN_CLOSE
 
-FunctionDeclaration → "function" IDENTIFIER "(" ParameterList ")" "{" StatementList ReturnStatement "}"
+FunctionDeclaration → FUNCTION IDENTIFIER PAREN_OPEN ParameterList PAREN_CLOSE BRACE_OPEN StatementList ReturnStatement BRACE_CLOSE
 
 ParameterList → IDENTIFIER
-              | IDENTIFIER "," ParameterList
+              | IDENTIFIER COMMA ParameterList
               | ε
 
-ReturnStatement → "return" Expression
+ReturnStatement → RETURN Expression
                 | ε
 
-Expression → Expression "==" Expression
-           | Expression "!=" Expression
-           | Expression "==." Expression
-           | Expression "!=." Expression
-           | Expression "+" Expression
-           | Expression "-" Expression
-           | Expression "+." Expression
-           | Expression "-." Expression
-           | Expression "++" Expression
-           | Expression "*" Expression
-           | Expression "/" Expression
-           | Expression "*." Expression
-           | Expression "/." Expression
-           | "--" Expression
-           | "--." Expression
-           | "(" Expression ")"
+Expression → Expression INTEGER_EQUALITY Expression
+           | Expression INTEGER_INEQUALITY Expression
+           | Expression FLOAT_EQUALITY Expression
+           | Expression FLOAT_INEQUALITY Expression
+           | Expression INTEGER_ADDITION Expression
+           | Expression INTEGER_SUBTRACTION Expression
+           | Expression FLOAT_ADDITION Expression
+           | Expression FLOAT_SUBTRACTION Expression
+           | Expression STRING_CONCAT Expression
+           | Expression INTEGER_MULTIPLICATION Expression
+           | Expression INTEGER_DIVISION Expression
+           | Expression FLOAT_MULTIPLICATION Expression
+           | Expression FLOAT_DIVISION Expression
+           | INTEGER_UMINUS Expression
+           | FLOAT_UMINUS Expression
+           | PAREN_OPEN Expression PAREN_CLOSE
            | FunctionCall
            | IDENTIFIER
            | INTEGER
@@ -52,23 +52,60 @@ Expression → Expression "==" Expression
            | STRING
            | BOOLEAN
 
-// Note: The four comparison rules below also appear in Expression.
-// Ideally, BooleanExpression would be a proper subset of Expression
-// (Expression → BooleanExpression), but adding that rule creates
-// a circular dependency (Expression → BooleanExpression → Expression) that causes hundreds
-// of shift/reduce and reduce/reduce conflicts in an LALR(1) parser.
-// The duplication is intentional: BooleanExpression constrains if/while
-// conditions at the grammar level, while Expression allows comparisons
-// in all other contexts. Type correctness is enforced in semantic analysis.
-BooleanExpression → Expression "==" Expression
-                  | Expression "!=" Expression
-                  | Expression "==." Expression
-                  | Expression "!=." Expression
+BooleanExpression → Expression INTEGER_EQUALITY Expression
+                  | Expression INTEGER_INEQUALITY Expression
+                  | Expression FLOAT_EQUALITY Expression
+                  | Expression FLOAT_INEQUALITY Expression
                   | IDENTIFIER
                   | BOOLEAN
 
-FunctionCall → IDENTIFIER "(" ArgumentList ")"
+FunctionCall → IDENTIFIER PAREN_OPEN ArgumentList PAREN_CLOSE
 
-ArgumentList → Expression "," ArgumentList
+ArgumentList → Expression COMMA ArgumentList
              | Expression
              | ε
+
+// Token's Lexeme
+// Keywords
+IF       → "if"
+ELSE     → "else"
+WHILE    → "while"
+PRINT    → "print"
+FUNCTION → "function"
+RETURN   → "return"
+
+// Symbols
+ASSIGNMENT  → "="
+PAREN_OPEN  → "("
+PAREN_CLOSE → ")"
+BRACE_OPEN  → "{"
+BRACE_CLOSE → "}"
+COMMA       → ","
+
+// Integer operators
+INTEGER_ADDITION       → "+"
+INTEGER_SUBTRACTION    → "-"
+INTEGER_MULTIPLICATION → "*"
+INTEGER_DIVISION       → "/"
+INTEGER_UMINUS         → "--"
+INTEGER_EQUALITY       → "=="
+INTEGER_INEQUALITY     → "!="
+
+// Float operators
+FLOAT_ADDITION         → "+."
+FLOAT_SUBTRACTION      → "-."
+FLOAT_MULTIPLICATION   → "*."
+FLOAT_DIVISION         → "/."
+FLOAT_UMINUS           → "--."
+FLOAT_EQUALITY         → "==."
+FLOAT_INEQUALITY       → "!=."
+
+// String operator
+STRING_CONCAT → "++"
+
+// Literals
+INTEGER    → [0-9]+
+FLOAT      → [0-9]+ "." [0-9]+
+STRING     → "'" [^']* "'"
+BOOLEAN    → "true" | "false"
+IDENTIFIER → [a-zA-Z_][a-zA-Z0-9_]*
